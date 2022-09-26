@@ -1,0 +1,1 @@
+import{_ as t,o as e,b as n,i as a}from"./index.91226b5a.js";const r={},s=[a("p",{style:{"text-align":"center","font-size":"140px","margin-bottom":"50px"}},"401",-1),a("p",{style:{"text-align":"center","font-size":"40px"}},"你没有权限去该页面",-1)];var i=t(r,[["render",function(t,a){return e(),n("div",null,s)}]]);export{i as default};

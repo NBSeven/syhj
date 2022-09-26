@@ -1,0 +1,1 @@
+const e=(e,r,t)=>{const{columns:u,data:a}=e,c=[];return u.forEach(((e,u)=>{if(1===u)return void(c[u]=`${r||"模具费"}合计`);let n=[];n=t?a.map((e=>e[t])):a.map((e=>Number((e.count||0)*(e.unitPrice||0)))),n.every((e=>Number.isNaN(e)))||2!==u?c[u]="":c[u]=`¥ ${n.reduce(((e,r)=>Number.isNaN(r)?e:e+r),0)}`})),c};export{e as g};
