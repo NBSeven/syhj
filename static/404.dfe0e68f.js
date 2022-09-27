@@ -1,1 +1,0 @@
-import{_ as t,o as e,b as n,i as a}from"./index.ad8f3002.js";const r={},s=[a("p",{style:{"text-align":"center","font-size":"140px","margin-bottom":"50px"}},"404",-1),a("p",{style:{"text-align":"center","font-size":"40px"}},"未找到你想要的页面",-1)];var i=t(r,[["render",function(t,a){return e(),n("div",null,s)}]]);export{i as default};
