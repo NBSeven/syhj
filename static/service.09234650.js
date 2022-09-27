@@ -1,1 +1,0 @@
-import{Q as t}from"./index.5e590414.js";function a(a){return t({url:"/api/services/app/AnalyseBoard/GetQuotationList",method:"get",data:a})}function e(a){return t({url:"/api/services/app/AnalyseBoard/PostAuditQuotationList",method:"post",data:a})}export{a as G,e as P};

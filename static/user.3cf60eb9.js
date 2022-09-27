@@ -1,1 +1,0 @@
-import{Q as e}from"./index.5e590414.js";function s(s){return e({url:"/api/services/app/User/ResetPassword",method:"post",data:s})}function t(s){return e({url:"/api/services/app/User/GetUserListByRoleName",method:"get",data:{roleName:s,maxResultCount:200,skipCount:0}})}export{s as c,t as g};
