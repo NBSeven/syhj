@@ -1,0 +1,1 @@
+import{Y as e,E as r}from"./index.5e590414.js";const o=r=>{const o=e.service({lock:!0,text:"正在上传中",background:"rgba(0, 0, 0, 0.7)"});100===r.percent&&o.close()},s=()=>{r.error("上传失败")};export{o as a,s as h};
