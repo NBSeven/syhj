@@ -20,7 +20,8 @@
         </el-table-column>
         <el-table-column label="数量" prop="count" width="180">
           <template #default="{ row }">
-            <el-input-number
+            <el-input-number v-model="row.count" controls-position="right" :min="0" />
+            <!-- <el-input-number
               v-model="row.count"
               controls-position="right"
               :min="0"
@@ -28,7 +29,7 @@
             />
             <div v-else>
               {{ row.count }}
-            </div>
+            </div> -->
           </template>
         </el-table-column>
         <el-table-column label="单价" width="180">
