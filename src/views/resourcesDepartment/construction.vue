@@ -90,7 +90,7 @@
           </el-table-column>
           <el-table-column label="物料管制状态">
             <template #default="{ row }">
-              <el-select v-model="row.ECCNCode">
+              <el-select v-model="row.eccnCode" :disabled="row.isSubmit">
                 <el-option label="ECCN" value="ECCN" />
                 <el-option label="EAR99" value="EAR99" />
                 <el-option label="待定" value="待定" />
