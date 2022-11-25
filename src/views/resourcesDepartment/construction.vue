@@ -82,13 +82,13 @@
               <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="备注">
+          <el-table-column label="备注" width="180">
             <template #default="{ row }">
               <el-input v-if="row.isEdit" v-model="row.remark" />
               <span v-if="!row.isEdit">{{ row.remark }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="物料管制状态">
+          <el-table-column label="物料管制状态" width="180">
             <template #default="{ row }">
               <el-select v-model="row.eccnCode" :disabled="row.isSubmit">
                 <el-option label="ECCN" value="ECCN" />
