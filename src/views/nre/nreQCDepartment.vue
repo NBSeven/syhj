@@ -33,7 +33,10 @@
 
         <el-table-column label="费用" width="180">
           <template #default="{ row }">
-            {{ row.unitPrice * row.count }}
+            <div>
+              <span v-show="false">{{ (row.cost = row.unitPrice * row.count) }}</span>
+              {{ row.unitPrice * row.count }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="使用工站" width="180">

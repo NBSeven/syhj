@@ -82,6 +82,16 @@
         <el-table-column prop="moq" label="MOQ" width="150" />
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
         <el-table-column prop="remark" label="备注" />
+        <el-table-column label="物料管制状态">
+          <template #default="{ row }">
+            <el-select v-model="row.ECCNCode">
+              <el-option label="ECCN" value="ECCN" />
+              <el-option label="EAR99" value="EAR99" />
+              <el-option label="待定" value="待定" />
+              <el-option label="不涉及" value="不涉及" />
+            </el-select>
+          </template>
+        </el-table-column>
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
       <el-descriptions :column="2" border>
