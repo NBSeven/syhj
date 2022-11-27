@@ -20,8 +20,8 @@ const route = useRoute()
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let { auditFlowId } = route.query
-  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId)
+  let { auditFlowId, productId } = route.query
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId, productId)
   if (!downRes.result.threeDFileId) return false
   let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res

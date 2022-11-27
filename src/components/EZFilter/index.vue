@@ -20,7 +20,7 @@
               v-for="opt in item.options"
               :key="opt.value"
               :label="opt.label"
-              :value="opt.value || opt.label"
+              :value="opt.value"
               :disabled="opt.disabled"
             />
           </el-select>

@@ -38,7 +38,7 @@
               ))
             }} -->
             <div v-show="false">
-              {{ (scope.row.offerMoney = (scope.row.offerCoefficient * scope.row.pricingMoney).toFixed(2)) }}
+              {{ (scope.row.offerMoney = Number((scope.row.offerCoefficient * scope.row.pricingMoney).toFixed(2))) }}
             </div>
             {{ formatThousandths(null, null, scope.row.offerCoefficient * scope.row.pricingMoney) }}
           </template>
@@ -481,6 +481,7 @@ const formatOtherThousandths = (_record: any, _row: any, cellValue: any) => {
 
 // nre 合计
 const calculationNre = (key: string) => {
+  console.log(data.nre)
   const count = data.nre.map((item: any) => item[key]) || []
   if (!count.length) return 0
   const total = count.reduce((a: number, b: number) => a + b)

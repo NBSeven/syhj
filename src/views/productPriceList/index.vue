@@ -155,7 +155,7 @@ import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { getPriceEvaluationTable, getPriceEvaluationTableResult, PriceEvaluationTableDownload } from "./service"
 import getQuery from "@/utils/getQuery"
 import EZFilter from "@/components/EZFilter/index.vue"
-import { getYears } from "../pmDepartment/service"
+import { GetPricingPanelTimeSelectList } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
 import { formatDateTime } from "@/utils/index"
 
@@ -270,8 +270,9 @@ const fetchPriceEvaluationTable = async (props?: any) => {
 }
 
 const fetchSopYear = async () => {
-  const { result } = (await getYears(auditFlowId)) || {}
-  data.filterNnum[0].options = result.map((item: any) => ({ label: item })) || []
+  const res: any = (await GetPricingPanelTimeSelectList(auditFlowId)) || {}
+  console.log(res)
+  data.filterNnum[0].options = res.result.items.map((item: any) => ({ label: item.name, value: item.id })) || []
 }
 
 // 产品核价表下载

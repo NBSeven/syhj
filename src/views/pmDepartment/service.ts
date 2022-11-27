@@ -11,6 +11,16 @@ export function getYears(auditFlowId: number | undefined): any {
     }
   })
 }
+/** 获取年份 （全生命周期）*/
+export function GetPricingPanelTimeSelectList(AuditFlowId: number | undefined) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetPricingPanelTimeSelectList",
+    method: "get",
+    data: {
+      AuditFlowId
+    }
+  })
+}
 // 提交数据
 export function saveProductionControl(data: SaveProductionControlInfo) {
   return request({

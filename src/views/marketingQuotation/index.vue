@@ -312,7 +312,6 @@ const downLoad3DExploded = async () => {
 }
 // nre 合计
 const calculationNre = (key: string) => {
-  data.marketingQuotationData
   const count = data.marketingQuotationData.expensesStatement.map((item: any) => item[key]) || []
   if (!count.length) return 0
   const total = count.reduce((a: number, b: number) => a + b)
