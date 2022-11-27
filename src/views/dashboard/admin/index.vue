@@ -645,8 +645,13 @@ const handleChangeMode = () => {
 
 // 生成核价表
 const handleCreatePriceEvaluation = debounce(async () => {
-  await CreatePriceEvaluationTable(auditFlowId)
-  ElMessage.success("生成成功！")
+  await CreatePriceEvaluationTable(auditFlowId).then((data:any)=>{
+    if(data.success)
+    {
+      ElMessage.success("生成成功！")
+    }
+  })
+
 }, 500)
 
 // 设置投入量和年份
