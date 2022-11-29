@@ -4,8 +4,21 @@
       <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
       <ThreeDImage m="2" />
     </el-row>
+    <div class="card-div">
+      <span class="card-span"> 总未提交数量:{{ SumCount }}</span>
+    </div>
     <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
-      <el-card m="2" :header="item.superTypeName" v-loading="item.loading">
+      <el-card m="2" v-loading="item.loading">
+        <template #header>
+          <div class="card-header">
+            <span>{{ item.superTypeName }}</span>
+            <span class="card-span">
+              未提交的数量:{{
+                   item.structureMaterial.filter((p: any) => !p.isSubmit).length
+              }}</span
+            >
+          </div>
+        </template>
         <el-table :data="item.structureMaterial" height="500">
           <el-table-column type="index" label="序号" width="80" fixed="left" />
           <el-table-column prop="categoryName" label="物料大类" width="150" fixed="left" />
@@ -145,7 +158,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ConstructionModel } from "./data.type"
 import ThreeDImage from "@/components/ThreeDImage/index.vue"
 
@@ -188,7 +201,6 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  console.log(constructionBomList.value, "constructionBomList")
   fetchInitData()
   fetchModuleNumberData()
 })
@@ -205,12 +217,22 @@ const fetchOptionsData = async () => {
 const fetchInitData = async () => {
   const { result } = (await GetStructural({ auditFlowId, productId })) || {}
   constructionBomList.value = result || []
+  console.log(constructionBomList.value, "constructionBomList")
 }
 
 // 计算总值
 const reduceArr = (arr: any[]) => {
   return arr.reduce((a, b) => a + b)
 }
+
+let SumCount = computed(() => {
+  let count = 0
+  const prop = constructionBomList.value
+  prop.forEach((item: any) => {
+    count += item.structureMaterial.filter((p: any) => !p.isSubmit).length
+  })
+  return count
+})
 
 const calculationAllStandardMoney = (structureMaterial: any) => {
   let obj: any = {}
@@ -315,5 +337,19 @@ watchEffect(() => {})
 <style scoped lang="scss">
 .table-wrap {
   margin: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-div {
+  margin: 0 auto;
+  text-align: center;
+}
+.card-span {
+  color: red;
+  font-weight: bold;
 }
 </style>

@@ -1,6 +1,12 @@
 <template>
   <div class="margin-top">
-    <el-card class="table-wrap" header="电子料单价录入界面" v-loading="tableLoading">
+    <el-card class="table-wrap" v-loading="tableLoading">
+      <template #header>
+        <div class="card-header">
+          <span>电子料单价录入界面</span>
+          <span class="card-span"> 未提交的数量:{{ electronicBomList.filter((p) => !p.isSubmit).length }}</span>
+        </div>
+      </template>
       <el-table :data="electronicBomList" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="180" fixed="left" />
         <el-table-column prop="typeName" label="物料种类" width="180" fixed="left" />
@@ -340,3 +346,14 @@ const handleCalculationIginalCurrency = async (row: any, index: number) => {
   }
 }
 </script>
+<style>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-span {
+  color: red;
+  font-weight: bold;
+}
+</style>
