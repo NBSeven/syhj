@@ -8,7 +8,7 @@
         </div>
       </template>
       <el-table :data="electronicBomList" height="75vh">
-        <el-table-column prop="categoryName" label="物料大类" width="180" fixed="left" />
+        <el-table-column prop="categoryName" label="物料大类" width="130" fixed="left" />
         <el-table-column prop="typeName" label="物料种类" width="180" fixed="left" />
         <el-table-column prop="sapItemNum" label="物料编号" width="180" fixed="left" />
         <el-table-column prop="sapItemName" label="材料名称" width="180" fixed="left" />
@@ -18,7 +18,7 @@
             :key="item"
             :label="`${item}`"
             :prop="`materialsUseCount[${index}].value`"
-            width="180"
+            width="100"
           />
         </el-table-column>
         <el-table-column prop="currency" label="币种" width="150">
@@ -39,7 +39,7 @@
             :key="item"
             :label="`${item}`"
             :prop="`systemiginalCurrency[${index}].value`"
-            width="180"
+            width="100"
           />
         </el-table-column>
         <el-table-column prop="inTheRate" label="年降率">
@@ -48,7 +48,7 @@
             :key="item"
             :label="`${item}`"
             :prop="`inTheRate[${index}].value`"
-            width="180"
+            width="100"
           >
             <template #default="scope">
               <el-input
@@ -69,7 +69,7 @@
             :key="item"
             :label="`${item?.toString()}`"
             :prop="`iginalCurrency[${index}].value`"
-            width="180"
+            width="100"
           >
             <template #default="scope">
               <el-input-number
@@ -89,32 +89,32 @@
             :key="item"
             :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
-            width="180"
+            width="100"
           >
             <template #default="{ row }">
               {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column prop="moq" label="MOQ" width="180">
+        <el-table-column prop="moq" label="MOQ" width="100">
           <template #default="{ row }">
             <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
             <span v-if="!row.isEdit">{{ row.moq }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
+        <el-table-column prop="rebateMoney" label="物料返利金额" width="100">
           <template #default="{ row }">
             <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
             <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="备注" width="180">
+        <el-table-column label="备注" width="100">
           <template #default="{ row }">
             <el-input v-if="row.isEdit" v-model="row.remark" />
             <span v-if="!row.isEdit">{{ row.remark }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="物料管制状态" width="180">
+        <el-table-column label="物料管制状态" width="130">
           <template #default="{ row }">
             <el-select v-model="row.eccnCode" :disabled="row.isSubmit">
               <el-option label="ECCN" value="ECCN" />
