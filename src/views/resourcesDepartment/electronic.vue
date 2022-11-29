@@ -8,20 +8,20 @@
         </div>
       </template>
       <el-table :data="electronicBomList" height="75vh">
-        <el-table-column prop="categoryName" label="物料大类" width="130" fixed="left" />
-        <el-table-column prop="typeName" label="物料种类" width="180" fixed="left" />
-        <el-table-column prop="sapItemNum" label="物料编号" width="180" fixed="left" />
-        <el-table-column prop="sapItemName" label="材料名称" width="180" fixed="left" />
+        <el-table-column prop="categoryName" label="物料大类" width="60" fixed="left" />
+        <el-table-column prop="typeName" label="物料种类" width="80" fixed="left" />
+        <el-table-column prop="sapItemNum" label="物料编号" width="80" fixed="left" />
+        <el-table-column prop="sapItemName" label="材料名称" width="120" fixed="left" />
         <el-table-column prop="materialsUseCount" label="项目物料的使用量">
           <el-table-column
             v-for="(item, index) in allColums?.materialsUseCountYears"
             :key="item"
             :label="`${item}`"
             :prop="`materialsUseCount[${index}].value`"
-            width="100"
+            width="80"
           />
         </el-table-column>
-        <el-table-column prop="currency" label="币种" width="150">
+        <el-table-column prop="currency" label="币种" width="100">
           <template #default="scope">
             <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
               <el-option
@@ -48,7 +48,7 @@
             :key="item"
             :label="`${item}`"
             :prop="`inTheRate[${index}].value`"
-            width="100"
+            width="150"
           >
             <template #default="scope">
               <el-input
@@ -69,7 +69,7 @@
             :key="item"
             :label="`${item?.toString()}`"
             :prop="`iginalCurrency[${index}].value`"
-            width="100"
+            width="120"
           >
             <template #default="scope">
               <el-input-number
@@ -89,20 +89,20 @@
             :key="item"
             :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
-            width="100"
+            width="120"
           >
             <template #default="{ row }">
               {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column prop="moq" label="MOQ" width="100">
+        <el-table-column prop="moq" label="MOQ" width="120">
           <template #default="{ row }">
             <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
             <span v-if="!row.isEdit">{{ row.moq }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="rebateMoney" label="物料返利金额" width="100">
+        <el-table-column prop="rebateMoney" label="物料返利金额" width="120">
           <template #default="{ row }">
             <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
             <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
