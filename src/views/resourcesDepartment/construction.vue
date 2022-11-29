@@ -14,9 +14,8 @@
             <span>{{ item.superTypeName }}</span>
             <span class="card-span">
               未提交的数量:{{
-                   item.structureMaterial.filter((p: any) => !p.isSubmit).length
-              }}</span
-            >
+              item.structureMaterial.filter((p: any) => !p.isSubmit).length
+              }}</span>
           </div>
         </template>
         <el-table :data="item.structureMaterial" height="500">
@@ -35,12 +34,8 @@
           <el-table-column prop="currency" label="币种" width="150">
             <template #default="scope">
               <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-                <el-option
-                  v-for="item in exchangeSelectOptions"
-                  :key="item.id"
-                  :label="item.exchangeRateKind"
-                  :value="item.exchangeRateKind"
-                />
+                <el-option v-for="item in exchangeSelectOptions" :key="item.id" :label="item.exchangeRateKind"
+                  :value="item.exchangeRateKind" />
               </el-select>
             </template>
           </el-table-column>
@@ -51,33 +46,20 @@
             </template>
           </el-table-column> -->
           <el-table-column prop="iginalCurrency" label="原币">
-            <el-table-column
-              v-for="(item, iginalCurrencyIndex) in data?.sop"
-              :key="`construction-iginalCurrency${item}`"
-              :label="`${item?.toString()}`"
-              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
-              width="180"
-            >
+            <el-table-column v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="`construction-iginalCurrency${item}`" :label="`${item?.toString()}`"
+              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`" width="180">
               <template #default="scope">
-                <el-input-number
-                  v-if="scope.row.isEdit"
-                  v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
-                  controls-position="right"
-                  :min="0"
-                  @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
-                />
+                <el-input-number v-if="scope.row.isEdit" v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
+                  controls-position="right" :min="0"
+                  @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)" />
                 <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column prop="standardMoney" label="本位币">
-            <el-table-column
-              v-for="(item, index) in data?.sop"
-              :key="`construction-standardMoney${item}`"
-              :label="`${item?.toString()}`"
-              :prop="`standardMoney[${index}].value`"
-              width="180"
-            >
+            <el-table-column v-for="(item, index) in data?.sop" :key="`construction-standardMoney${item}`"
+              :label="`${item?.toString()}`" :prop="`standardMoney[${index}].value`" width="180">
               <template #default="{ row }">
                 {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
               </template>
@@ -114,29 +96,14 @@
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
-              <el-button
-                link
-                :disabled="scope.row.isSubmit"
-                @click="handleSubmit(scope.row, 0, bomIndex, scope.$index)"
-                type="danger"
-                >确认</el-button
-              >
-              <el-button
-                v-if="scope.row.isEntering"
-                :disabled="scope.row.isSubmit"
-                link
-                @click="handleSubmit(scope.row, 1, bomIndex, scope.$index)"
-                type="warning"
-              >
+              <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0, bomIndex, scope.$index)"
+                type="danger">确认</el-button>
+              <el-button v-if="scope.row.isEntering" :disabled="scope.row.isSubmit" link
+                @click="handleSubmit(scope.row, 1, bomIndex, scope.$index)" type="warning">
                 提交
               </el-button>
-              <el-button
-                v-if="!scope.row.isEdit"
-                :disabled="scope.row.isSubmit"
-                link
-                @click="handleEdit(scope.row, true)"
-                type="primary"
-              >
+              <el-button v-if="!scope.row.isEdit" :disabled="scope.row.isSubmit" link
+                @click="handleEdit(scope.row, true)" type="primary">
                 修改
               </el-button>
               <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
@@ -144,11 +111,8 @@
           </el-table-column>
         </el-table>
         <el-descriptions :column="2" border>
-          <el-descriptions-item
-            v-for="standardMoneyItem in data.sop"
-            :key="standardMoneyItem"
-            :label="`${standardMoneyItem} 本位币汇总`"
-          >
+          <el-descriptions-item v-for="standardMoneyItem in data.sop" :key="standardMoneyItem"
+            :label="`${standardMoneyItem} 本位币汇总`">
             {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
           </el-descriptions-item>
         </el-descriptions>
@@ -174,7 +138,7 @@ import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { useUserStore } from "@/store/modules/user"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 
 // 获取仓库的值
 const store = useUserStore()
@@ -268,7 +232,7 @@ const fetchModuleNumberData = async () => {
 
 // 确认结构料单价行数据
 const handleSubmit = async (
-  record: ConstructionModel,
+  record: any,
   isSubmit: number,
   bomIndex: number,
   iginalCurrencyIndex: number
@@ -279,7 +243,21 @@ const handleSubmit = async (
   } else {
     //确认 先计算然后再提交
     await handleCalculationIginalCurrency(record, bomIndex, iginalCurrencyIndex).then(async () => {
-      await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+      //判断本位币金额是否是否存在0
+      const prop = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].standardMoney.filter((p: any) => !p.value).length;
+      if (prop) {
+        ElMessageBox.confirm('该条数据本位币数据有0的存在,是否继续执行', '确认提醒', {
+          // if you want to disable its autofocus
+          // autofocus: false,
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(async () => {
+          await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+        })
+      } else {
+        await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+      }
     })
   }
 }
@@ -332,7 +310,7 @@ const handleEdit = (row: any, isEdit: boolean) => {
   row.isEdit = isEdit
 }
 
-watchEffect(() => {})
+watchEffect(() => { })
 </script>
 <style scoped lang="scss">
 .table-wrap {
@@ -344,10 +322,12 @@ watchEffect(() => {})
   justify-content: space-between;
   align-items: center;
 }
+
 .card-div {
   margin: 0 auto;
   text-align: center;
 }
+
 .card-span {
   color: red;
   font-weight: bold;
