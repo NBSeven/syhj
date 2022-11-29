@@ -175,7 +175,7 @@
 import { ref, reactive, onBeforeMount, onMounted, computed } from "vue"
 // import { useUserStore } from "@/store/modules/user"
 import { ElectronicDto } from "./data.type"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import {
   GetElectronic,
   PostElectronicMaterialCalculate,
@@ -267,6 +267,7 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: number, index: numb
     //提交
     await submitFun(record, isSubmit, index)
   } else {
+    //确认
     await handleSubmitcalculate(record, isSubmit, index)
   }
 }
@@ -284,16 +285,34 @@ const handleSubmitcalculate = async (record: ElectronicDto, isSubmit: number, in
       }
       return iszero
     })
+
   if (iszero) {
     //根据原币计算
     await handleCalculationIginalCurrency(record, index).then(async () => {
-      await submitFun(record, isSubmit, index)
+      await SubmitJudge(record, isSubmit, index)
     })
   } else {
     await handleCalculation(record, index).then(async () => {
-      await submitFun(record, isSubmit, index)
+      await SubmitJudge(record, isSubmit, index)
     })
     //根据年将率计算
+  }
+}
+
+const SubmitJudge = async (record: ElectronicDto, isSubmit: number, index: number) => {
+  const prop = electronicBomList.value[index].standardMoney?.filter((p: any) => !p.value).length
+  if (prop) {
+    ElMessageBox.confirm("该条数据本位币数据有0的存在,是否继续执行", "确认提醒", {
+      // if you want to disable its autofocus
+      // autofocus: false,
+      confirmButtonText: "确认",
+      cancelButtonText: "取消",
+      type: "warning"
+    }).then(async () => {
+      await submitFun(record, isSubmit, index)
+    })
+  } else {
+    await submitFun(record, isSubmit, index)
   }
 }
 
@@ -352,6 +371,7 @@ const handleCalculationIginalCurrency = async (row: any, index: number) => {
   justify-content: space-between;
   align-items: center;
 }
+
 .card-span {
   color: red;
   font-weight: bold;

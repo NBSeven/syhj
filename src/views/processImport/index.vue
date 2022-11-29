@@ -292,7 +292,7 @@ const downLoadTemplate = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId)
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId,productId)
   if (!downRes.result.threeDFileId) return false
   let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res
