@@ -250,8 +250,8 @@
         <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
           <el-table-column label="年份" width="180" prop="year" />
           <el-table-column label="客户年降率(%)">
-            <template #default="{ row }">
-              <el-input v-model="row.annualDeclineRate">
+            <template #default="{ row,$index}">
+              <el-input v-model="row.annualDeclineRate"  :disabled="!$index">
                 <template #append>%</template>
               </el-input>
             </template>
