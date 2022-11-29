@@ -131,7 +131,7 @@ import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
 const router = useRouter()
 const query = useJump()
 const { jumpTodoCenter, jumpPage } = query
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId = 1, productId}: any = getQuery()
 /**
  * 数据部分
  */
@@ -292,7 +292,7 @@ const downTrFile = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId)
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId,productId)
   if (!downRes.result.threeDFileId) return false
   let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res
