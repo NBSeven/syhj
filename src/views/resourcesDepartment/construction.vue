@@ -254,6 +254,8 @@ const handleSubmit = async (
           type: 'warning',
         }).then(async () => {
           await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+        }).catch(async ()=>{
+          fetchInitData()
         })
       } else {
         await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
