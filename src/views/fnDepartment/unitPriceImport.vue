@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
+import { ElMessageBox } from "element-plus"
 import unitCols from "./constant"
 import { getUInitPrice } from "./service"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
@@ -61,6 +62,15 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     searchForm.skipCount = 0
     data.pageNo = 1
     getList()
+    ElMessageBox.alert("上传成功", "成功", {
+      type: "success",
+      confirmButtonText: "OK"
+    })
+  } else {
+    ElMessageBox.alert(res.error.message, "提醒", {
+      type: "warning",
+      confirmButtonText: "OK"
+    })
   }
 }
 // const downLoadTemplate = async () => {
