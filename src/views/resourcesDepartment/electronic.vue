@@ -308,9 +308,13 @@ const SubmitJudge = async (record: ElectronicDto, isSubmit: number, index: numbe
       confirmButtonText: "确认",
       cancelButtonText: "取消",
       type: "warning"
-    }).then(async () => {
-      await submitFun(record, isSubmit, index)
     })
+      .then(async () => {
+        await submitFun(record, isSubmit, index)
+      })
+      .catch(async () => {
+        fetchInitData()
+      })
   } else {
     await submitFun(record, isSubmit, index)
   }
