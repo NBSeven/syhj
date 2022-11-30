@@ -17,6 +17,7 @@
         <el-table-column label="单价" prop="unitPrice" />
         <el-table-column label="金额" prop="amount" />
         <el-table-column label="物料管制状态分类" prop="controlStateType" />
+        <el-table-column label="材料名称" prop="materialDetailName" />
       </el-table>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="ECCN成分价值占比">
