@@ -5,14 +5,9 @@
         <el-row align="middle" justify="space-between">
           <span>工序工时导入</span>
           <el-row align="middle">
-            <el-upload
-              :action="$baseUrl + 'api/services/app/WorkingHours/UploadExcel'"
-              :on-success="handleSuccess"
-              show-file-list
-              :data="{ auditFlowId: data.auditFlowId }"
-              :on-progress="handleGetUploadProgress"
-              :on-error="handleUploadError"
-            >
+            <el-upload :action="$baseUrl + 'api/services/app/WorkingHours/UploadExcel'" :on-success="handleSuccess"
+              show-file-list :data="{ auditFlowId: data.auditFlowId }" :on-progress="handleGetUploadProgress"
+              :on-error="handleUploadError">
               <el-button type="primary" style="margin: 10px 10px 0 0">工序工时上传</el-button>
             </el-upload>
             <el-button class="m-2" type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
@@ -30,36 +25,21 @@
           <el-table-column label="工序" prop="procedure" width="100" />
           <el-table-column label="设备部分" class-name="columnColor1">
             <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
-              <el-table-column
-                :prop="`equipmentPart.equipmentDetails[${index}].equipmentName`"
-                :label="`设备${index + 1}`"
-                width="180"
-              />
-              <el-table-column
-                :prop="`equipmentPart.equipmentDetails[${index}].status`"
-                :label="`设备${index + 1}状态`"
-                width="180"
-              />
-              <el-table-column
-                :prop="`equipmentPart.equipmentDetails[${index}].number`"
-                :label="`设备${index + 1}数量`"
-                width="180"
-              />
-              <el-table-column
-                :prop="`equipmentPart.equipmentDetails[${index}].price`"
-                :label="`设备${index + 1}单价`"
-                width="180"
-              />
+              <el-table-column :prop="`equipmentPart.equipmentDetails[${index}].equipmentName`"
+                :label="`设备${index + 1}`" width="180" />
+              <el-table-column :prop="`equipmentPart.equipmentDetails[${index}].status`" :label="`设备${index + 1}状态`"
+                width="180" />
+              <el-table-column :prop="`equipmentPart.equipmentDetails[${index}].number`" :label="`设备${index + 1}数量`"
+                width="180" />
+              <el-table-column :prop="`equipmentPart.equipmentDetails[${index}].price`" :label="`设备${index + 1}单价`"
+                width="180" />
             </template>
             <el-table-column prop="equipmentPart.total" label="设备总价" width="180" />
           </el-table-column>
           <el-table-column label="追溯部分" class-name="columnColor2">
             <template v-for="(item, index) in data.retrospectPart?.equipmentDetails" :key="`retrospectPart-${index}`">
-              <el-table-column
-                :prop="`retrospectPart.equipmentDetails[${index}].equipmentName`"
-                :label="`设备${index + 1}`"
-                width="180"
-              />
+              <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].equipmentName`"
+                :label="`设备${index + 1}`" width="180" />
               <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].status`" label="状态" width="180" />
               <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].number`" label="数量" width="180" />
               <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].price`" label="单价" width="180" />
@@ -70,30 +50,14 @@
             <el-table-column prop="retrospectPart.total" label="开发总价" width="180" />
           </el-table-column>
           <el-table-column label="工装治具部分" class-name="columnColor3">
-            <template
-              v-for="(item, index) in data.toolingFixturePart?.equipmentDetails"
-              :key="`toolingFixturePart-${index}`"
-            >
-              <el-table-column
-                :prop="`toolingFixturePart.equipmentDetails[${index}].equipmentName`"
-                :label="`治具${index + 1}`"
-                width="180"
-              />
-              <el-table-column
-                :prop="`toolingFixturePart.equipmentDetails[${index}].status`"
-                label="状态"
-                width="180"
-              />
-              <el-table-column
-                :prop="`toolingFixturePart.equipmentDetails[${index}].number`"
-                label="数量"
-                width="180"
-              />
-              <el-table-column
-                :prop="`toolingFixturePart.equipmentDetails[${index}].price`"
-                :label="`治具单价${index + 1}`"
-                width="180"
-              />
+            <template v-for="(item, index) in data.toolingFixturePart?.equipmentDetails"
+              :key="`toolingFixturePart-${index}`">
+              <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].equipmentName`"
+                :label="`治具${index + 1}`" width="180" />
+              <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].status`" label="状态" width="180" />
+              <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].number`" label="数量" width="180" />
+              <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].price`" :label="`治具单价${index + 1}`"
+                width="180" />
             </template>
             <el-table-column prop="toolingFixturePart.toolingName" label="工装名称" width="180" />
             <el-table-column prop="toolingFixturePart.toolingNum" label="数量" width="180" />
@@ -103,26 +67,13 @@
             <el-table-column prop="toolingFixturePart.testPrice" label="线束单价" width="180" />
             <el-table-column prop="toolingFixturePart.total" label="工装治具总价" width="180" />
           </el-table-column>
-          <template
-            v-for="(item, index) in data.humanMachineHoursDetailList"
-            :key="`humanMachineHoursDetailList-${index}`"
-          >
+          <template v-for="(item, index) in data.humanMachineHoursDetailList"
+            :key="`humanMachineHoursDetailList-${index}`">
             <el-table-column :label="item.year" class-name="columnColor4">
-              <el-table-column
-                :prop="`humanMachineHoursDetailList[${index}]laborTime`"
-                label="标准人工工时"
-                width="180"
-              />
-              <el-table-column
-                :prop="`humanMachineHoursDetailList[${index}]machineHours`"
-                label="机器工时"
-                width="180"
-              />
-              <el-table-column
-                :prop="`humanMachineHoursDetailList[${index}]personnelNumber`"
-                label="人均跟线数量"
-                width="180"
-              />
+              <el-table-column :prop="`humanMachineHoursDetailList[${index}]laborTime`" label="标准人工工时" width="180" />
+              <el-table-column :prop="`humanMachineHoursDetailList[${index}]machineHours`" label="机器工时" width="180" />
+              <el-table-column :prop="`humanMachineHoursDetailList[${index}]personnelNumber`" label="人均跟线数量"
+                width="180" />
             </el-table-column>
           </template>
         </el-table>
@@ -144,30 +95,24 @@
             <el-table-column label="年份" prop="year" />
             <el-table-column label="人工工时" prop="`laborTime`" width="175">
               <template #default="{ row, $index }">
-                <el-form-item
-                  :prop="`tangent.${$index}.laborTime`"
-                  :rules="[{ required: true, message: '请输入人工工时', trigger: 'change' }]"
-                >
+                <el-form-item :prop="`tangent.${$index}.laborTime`"
+                  :rules="[{ required: true, message: '请输入人工工时', trigger: 'change' }]">
                   <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="机器工时" prop="machineHours" width="175">
               <template #default="{ row, $index }">
-                <el-form-item
-                  :prop="`tangent.${$index}.machineHours`"
-                  :rules="[{ required: true, message: '请输入机器工时', trigger: 'change' }]"
-                >
+                <el-form-item :prop="`tangent.${$index}.machineHours`"
+                  :rules="[{ required: true, message: '请输入机器工时', trigger: 'change' }]">
                   <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="人均跟线数量" prop="personnelNumber" width="175">
               <template #default="{ row, $index }">
-                <el-form-item
-                  :prop="`tangent.${$index}.personnelNumber`"
-                  :rules="[{ required: true, message: '请输入人均跟线数量', trigger: 'change' }]"
-                >
+                <el-form-item :prop="`tangent.${$index}.personnelNumber`"
+                  :rules="[{ required: true, message: '请输入人均跟线数量', trigger: 'change' }]">
                   <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
@@ -175,9 +120,8 @@
           </el-table>
           <el-row align="middle" justify="end" style="margin-top: 20px">
             <el-button type="primary" @click="handleSaveTangentHours(tangentFormRef)" v-havedone>保存</el-button>
-            <el-button type="warning" :disabled="!data.isSaved" @click="handleSubmit(tangentFormRef)" v-havedone
-              >提交流程</el-button
-            >
+            <el-button type="warning" :disabled="!data.isSaved" @click="handleSubmit(tangentFormRef)" v-havedone>提交流程
+            </el-button>
           </el-row>
         </el-form>
       </el-card>
@@ -292,7 +236,7 @@ const downLoadTemplate = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId,productId)
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId, productId)
   if (!downRes.result.threeDFileId) return false
   let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res
@@ -402,7 +346,8 @@ const handleSaveWorkingHour = async () => {
 const handleSubmit = async (formEl: FormInstance | undefined) => {
   await formEl?.validate(async (valid) => {
     if (valid) {
-      await SubmitWorkingHourAndSwitchLine(auditFlowId)
+      let { success }: any = await SubmitWorkingHourAndSwitchLine(auditFlowId)
+      if (!success) throw Error()
       ElMessage.success("提交成功！")
     } else {
       ElMessage.error("请填写正确数据！")
@@ -482,6 +427,7 @@ const handleSaveTangentHours = async (formEl: any) => {
   background-color: #409eff !important;
   color: #fff !important;
 }
+
 .columnColor2 {
   background-color: #67c23a !important;
   color: #fff !important;
