@@ -516,7 +516,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     redirect: "/timeliness/index",
     component: Layout,
     meta: {
-      roles: ["timeliness"]
+      roles: ["timeliness"],
     },
     children: [
       {
@@ -535,7 +535,26 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
           title: "时效性管理",
           hidden: true
         }
-      }
+      },
+    ]
+  },
+  {
+    path: "/",
+    redirect: "/todoCenter/index",
+    component: Layout,
+    meta: {
+      title: "关闭流程",
+      roles: ["timeliness"],
+    },
+    children: [
+      {
+        path: "/timeliness/closeFlow",
+        component: () => import("@/views/versionManagement/closeFlow.vue"),
+        name: "timelinessOperationRecord",
+        meta: {
+          title: "关闭流程",
+        },
+      },
     ]
   },
   {

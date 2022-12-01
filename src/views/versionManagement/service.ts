@@ -124,3 +124,16 @@ export function GetProductListByAuditFlowIds(data: {
     data
   })
 }
+
+//删除指定流程id的流程
+// 根据两个流程号，获取产品列表
+export function DeleteAuditFlowById(data: {
+  auditFlowId: number
+  deleteReason: string
+}): any {
+  return request({
+    url: "/api/services/app/AuditFlow/DeleteAuditFlowById",
+    method: "delete",
+    data
+  })
+}
