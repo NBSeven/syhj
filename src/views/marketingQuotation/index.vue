@@ -30,13 +30,8 @@
       <el-table :data="data.marketingQuotationData?.motionMessage" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="名称" prop="messageName" />
-        <el-table-column
-          v-for="(item, index) in data?.motionMessageSop"
-          :key="item.year"
-          :label="item.year"
-          :prop="`sop[${index}].value`"
-          :formatter="formatMarketingQuotationDatas"
-        />
+        <el-table-column v-for="(item, index) in data?.motionMessageSop" :key="item.year" :label="item.year"
+          :prop="`sop[${index}].value`" :formatter="formatMarketingQuotationDatas" />
       </el-table>
     </el-card>
     <el-card header="核心部件：" m="2">
@@ -113,10 +108,22 @@
       </div>
     </el-row>
   </el-card>
+  <el-dialog v-model="dialogVisible" title="3D爆炸图下载(请选择零件)" width="40%" align-center>
+    <el-space wrap>
+      <div v-for="prop in ProductByAuditFlowId" :key="prop">
+        <el-button type="success" plain @click="downLoad3D(prop.id)">{{ prop.product }}</el-button>
+      </div>
+    </el-space>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">关闭</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { GetQuotationList, PostAuditQuotationList } from "./service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
@@ -124,14 +131,16 @@ import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import { useRouter } from "vue-router"
 import { CommonDownloadFile } from "@/api/bom"
-import { GetPicture3DByAuditFlowId } from "../processImport/service"
+import { GetPicture3DByAuditFlowId, getProductByAuditFlowId } from "../processImport/service"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
 
 const router = useRouter()
 const query = useJump()
 const { jumpTodoCenter, jumpPage } = query
-const { auditFlowId = 1, productId}: any = getQuery()
+const { auditFlowId = 1 }: any = getQuery()
+const dialogVisible = ref(false)
+const ProductByAuditFlowId = ref<any>({})
 /**
  * 数据部分
  */
@@ -148,7 +157,7 @@ const data = reactive<any>({
   sor: {
     sorFileName: "",
     fileId: null
-  }
+  },
 })
 
 const columns = reactive({
@@ -292,7 +301,13 @@ const downTrFile = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId,productId)
+  const { result }: any = await getProductByAuditFlowId(auditFlowId);
+  ProductByAuditFlowId.value = result;
+  dialogVisible.value = true;
+}
+
+const downLoad3D = async (productId: any) => {
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId, productId)
   if (!downRes.result.threeDFileId) return false
   let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res
@@ -308,8 +323,9 @@ const downLoad3DExploded = async () => {
     a.click()
     a.remove() //将a标签移除
   }
-  // data.setVisible = false
+  dialogVisible.value = false
 }
+
 // nre 合计
 const calculationNre = (key: string) => {
   const count = data.marketingQuotationData.expensesStatement.map((item: any) => item[key]) || []
@@ -328,7 +344,7 @@ const toNREPriceList = () => {
   })
 }
 
-watchEffect(() => {})
+watchEffect(() => { })
 </script>
 <style scoped lang="scss">
 .demandApply-result-page {
