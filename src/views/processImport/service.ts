@@ -81,3 +81,14 @@ export function GetPicture3DByAuditFlowId(auditFlowId: number, productId: any) {
     }
   })
 }
+
+//根据流程号获取零件号
+export function getProductByAuditFlowId(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/GetProductByAuditFlowId",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}
