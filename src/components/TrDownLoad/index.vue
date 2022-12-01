@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect} from "vue"
 import { useRoute } from "vue-router"
 import { getAuditFlowVersion, downloadFile } from "./service"
 
