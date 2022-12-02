@@ -63,7 +63,7 @@
     </el-dialog>
     <el-row justify="end" style="margin-top: 20px">
       <div>
-        <el-button type="danger" @click="dialogVisible = true">删除</el-button>
+        <el-button type="danger" @click="dialogVisibleTrue">删除</el-button>
       </div>
     </el-row>
     <el-dialog v-model="dialogVisible" title="删除流程提醒" width="30%" align-center>
@@ -202,11 +202,6 @@ const closeFlow = async () => {
         data.versionManageData = data.versionManageData.filter((item: any) => {
           return item.versionBasicInfo.auditFlowId != prop.auditFlowId
         })
-      } else {
-        ElMessage({
-          type: "error",
-          message: error.message
-        })
       }
     } else {
       ElMessage({
@@ -215,6 +210,18 @@ const closeFlow = async () => {
       })
     }
   })
+}
+
+const dialogVisibleTrue = async () => {
+  const prop = data.checkFlow
+  if (Object.keys(prop).length) {
+    dialogVisible.value = true
+  } else {
+    ElMessage({
+      message: "必须选择一条流程删除进行删除",
+      type: "warning"
+    })
+  }
 }
 
 // const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable, auditFlowId }: any) => {
