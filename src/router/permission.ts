@@ -86,6 +86,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   }
   if (userRoles.includes("Timeliness")) {
     roles.push("timeliness")
+    roles.push("closeFlow")
   }
   permissionStore.setRoutes(roles)
   permissionStore.dynamicRoutes.forEach((route: any) => {

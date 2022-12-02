@@ -544,13 +544,13 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: "关闭流程",
-      roles: ["timeliness"],
+      roles: ["closeFlow"],
     },
     children: [
       {
         path: "/timeliness/closeFlow",
         component: () => import("@/views/versionManagement/closeFlow.vue"),
-        name: "timelinessOperationRecord",
+        name: "closeFlowPage",
         meta: {
           title: "关闭流程",
         },
