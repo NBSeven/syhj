@@ -1,43 +1,48 @@
 <template>
   <div class="versionManagement-wrap">
-    <EZFilter
-      :filterNnum="data.verisonfilterNnum"
-      :show-btn="true"
-      :initFilterValue="InitVersionFilterValue"
-      :onSubmit="queryTable"
-    />
-    <el-card class="table-wrap" header="系统版本管理表">
-      <el-table
-        ref="multipleTableRef"
-        :data="data.versionManageData"
-        :header-cell-class-name="cellClass"
-        style="width: 100%"
-        @select="checkSelect"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
-          <template #default="{ row }">
-            <el-button type="primary" link>
-              <a target="_blank" :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`">
-                {{ row.versionBasicInfo.projectName }}
-              </a>
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column prop="versionBasicInfo.version" label="版本号" />
-        <el-table-column prop="versionBasicInfo.auditFlowId" label="流程单号" />
-        <el-table-column label="拟稿时间">
-          <template #default="{ row }">
-            {{ formatDateTime(row.versionBasicInfo.draftTime || "") }}
-          </template>
-        </el-table-column>
-        <el-table-column label="完成时间">
-          <template #default="{ row }">
-            {{ formatDateTime(row.versionBasicInfo.finishedTime || "") }}
-          </template>
-        </el-table-column>
+    <el-tabs v-model="activeName" class="demo-tabs">
+      <el-tab-pane label="关闭流程" name="first">
+        <EZFilter
+          :filterNnum="data.verisonfilterNnum"
+          :show-btn="true"
+          :initFilterValue="InitVersionFilterValue"
+          :onSubmit="queryTable"
+        />
+        <el-card class="table-wrap" header="系统版本管理表">
+          <el-table
+            ref="multipleTableRef"
+            :data="data.versionManageData"
+            :header-cell-class-name="cellClass"
+            style="width: 100%"
+            @select="checkSelect"
+          >
+            <el-table-column type="selection" width="55" />
+            <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
+              <template #default="{ row }">
+                <el-button type="primary" link>
+                  <a
+                    target="_blank"
+                    :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
+                  >
+                    {{ row.versionBasicInfo.projectName }}
+                  </a>
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column prop="versionBasicInfo.version" label="版本号" />
+            <el-table-column prop="versionBasicInfo.auditFlowId" label="流程单号" />
+            <el-table-column label="拟稿时间">
+              <template #default="{ row }">
+                {{ formatDateTime(row.versionBasicInfo.draftTime || "") }}
+              </template>
+            </el-table-column>
+            <el-table-column label="完成时间">
+              <template #default="{ row }">
+                {{ formatDateTime(row.versionBasicInfo.finishedTime || "") }}
+              </template>
+            </el-table-column>
 
-        <!-- <el-table-column label="操作" fixed="right">
+            <!-- <el-table-column label="操作" fixed="right">
           <template #default="{ row }">
             <el-button
               v-if="row.versionBasicInfo.finishedTime"
@@ -52,20 +57,33 @@
             </el-tooltip>
           </template>
         </el-table-column> -->
-      </el-table>
-    </el-card>
-    <el-dialog title="报表汇总" width="80%" v-model="data.visible">
-      <versionDetail
-        :priceEvaluationTableList="data.priceEvaluationTableList"
-        :marketingQuotationData="data.marketingQuotationData"
-        :auditFlowId="data.auditFlowId"
-      />
-    </el-dialog>
-    <el-row justify="end" style="margin-top: 20px">
-      <div>
-        <el-button type="danger" @click="dialogVisibleTrue">删除</el-button>
-      </div>
-    </el-row>
+          </el-table>
+        </el-card>
+        <el-dialog title="报表汇总" width="80%" v-model="data.visible">
+          <versionDetail
+            :priceEvaluationTableList="data.priceEvaluationTableList"
+            :marketingQuotationData="data.marketingQuotationData"
+            :auditFlowId="data.auditFlowId"
+          />
+        </el-dialog>
+        <el-row justify="end" style="margin-top: 20px">
+          <div>
+            <el-button type="danger" @click="dialogVisibleTrue">删除</el-button>
+          </div>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane label="查询关闭的流程" name="second">
+        <el-card class="table-wrap" header="关闭的流程">
+          <el-table :data="data.AuditFlowDeleteList" style="width: 100%" height="650">
+            <el-table-column prop="auditFlowId" label="流程id" />
+            <el-table-column prop="auditFlowName" label="项目名称" />
+            <el-table-column prop="auditFlowVersion" label="版本" />
+            <el-table-column prop="deleteReason" label="删除理由" />
+          </el-table>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
+
     <el-dialog v-model="dialogVisible" title="删除流程提醒" width="30%" align-center>
       <div>
         <div>您确定要删除{{ data.checkFlow.projectName }} 版本号为{{ data.checkFlow.version }}这条流程嘛</div>
@@ -86,11 +104,17 @@
 import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { InitVersionFilterValue } from "./common/const"
 import EZFilter from "@/components/EZFilter/index.vue"
-import { GetVersionInfos, GetAllAuditFlowProjectNameAndVersion, DeleteAuditFlowById } from "./service"
+import {
+  GetVersionInfos,
+  GetAllAuditFlowProjectNameAndVersion,
+  DeleteAuditFlowById,
+  GetAuditFlowDeleteList
+} from "./service"
 import { formatDateTime } from "@/utils"
 import versionDetail from "./versionDetail.vue"
 import { ElTable, ElMessageBox, ElMessage } from "element-plus"
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
+const activeName = ref("first")
 // 获取项目已有核价流程所有项目名称以及对应版本号
 const getAllAuditFlowProjectName = async () => {
   const { result } = await GetAllAuditFlowProjectNameAndVersion()
@@ -149,7 +173,8 @@ const data = reactive<any>({
   versionsEnum: {},
   marketingQuotationData: null, // 报价表
   auditFlowId: null,
-  checkFlow: {}
+  checkFlow: {},
+  AuditFlowDeleteList: []
 })
 
 const queryTable = async (formValue: any) => {
@@ -179,6 +204,11 @@ const checkSelect = (selection: any, row: any) => {
 const cellClass = (row: any) => {
   if (row.columnIndex === 0) return "DisableSelection"
   return "ShowSelection"
+}
+
+const AuditFlowDeleteList = async (auditFlowId: number) => {
+  let { result } = await GetAuditFlowDeleteList({ auditFlowId })
+  data.AuditFlowDeleteList = result
 }
 
 const closeFlow = async () => {
@@ -243,6 +273,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   getAllAuditFlowProjectName()
+  AuditFlowDeleteList()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 
