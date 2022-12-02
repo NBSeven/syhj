@@ -249,7 +249,7 @@ onMounted(async () => {
         }
       }) as any
     }
-    // console.log(data.tableData)
+    console.log(data.tableData)
     // watch(
     //   () =>data.tableData,
     //   (val) => {
