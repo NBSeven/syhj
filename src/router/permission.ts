@@ -86,6 +86,8 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   }
   if (userRoles.includes("Timeliness")) {
     roles.push("timeliness")
+  }
+  if (userRoles.includes("项目经理")) {
     roles.push("closeFlow")
   }
   permissionStore.setRoutes(roles)
