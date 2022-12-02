@@ -137,3 +137,12 @@ export function DeleteAuditFlowById(data: {
     data
   })
 }
+
+//获取流程删除记录表的数据
+export function GetAuditFlowDeleteList(data:{auditFlowId: number}): any {
+  return request({
+    url: "/api/services/app/AuditFlow/GetAuditFlowDeleteList",
+    method: "get",
+    data
+  })
+}
