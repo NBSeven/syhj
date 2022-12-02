@@ -330,7 +330,6 @@ const toBomVerifyConstruction = () => {
 }
 
 const handleSaveWorkingHour = async () => {
-  try {
     let { success }: any = await SaveWorkingHour({
       auditFlowId: Number(auditFlowId),
       productId,
@@ -338,9 +337,6 @@ const handleSaveWorkingHour = async () => {
     })
     if (!success) throw Error()
     ElMessage.success("请求成功！")
-  } catch {
-    ElMessage.error("请求失败")
-  }
 }
 
 const handleSubmit = async (formEl: FormInstance | undefined) => {

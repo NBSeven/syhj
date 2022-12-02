@@ -185,7 +185,19 @@ const data = reactive({
     placeOfDelivery: ""
   }
 })
+watch(
+  () => data.tableData,
+  (value) => {
+    if (value) {
+      value.forEach((row: any) => {
+          row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
 
+          row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
+        })
+    }
+  },
+  { deep: true }
+)
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
@@ -238,17 +250,18 @@ onMounted(async () => {
       }) as any
     }
     // console.log(data.tableData)
-    watch(
-      data.tableData,
-      (val) => {
-        val.forEach((row: any) => {
-          row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
+    // watch(
+    //   () =>data.tableData,
+    //   (val) => {
+    //     console.log("123")
+    //     val.forEach((row: any) => {
+    //       row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
 
-          row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
-        })
-      },
-      { deep: true }
-    )
+    //       row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
+    //     })
+    //   },
+    //   { deep: true }
+    // )
   }
   // 获取运费信息
   let res: any = await getProductFreight({ auditFlowId: data.auditFlowId, productId: data.productId })
