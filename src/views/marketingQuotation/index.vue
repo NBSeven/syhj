@@ -30,8 +30,13 @@
       <el-table :data="data.marketingQuotationData?.motionMessage" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="名称" prop="messageName" />
-        <el-table-column v-for="(item, index) in data?.motionMessageSop" :key="item.year" :label="item.year"
-          :prop="`sop[${index}].value`" :formatter="formatMarketingQuotationDatas" />
+        <el-table-column
+          v-for="(item, index) in data?.motionMessageSop"
+          :key="item.year"
+          :label="item.year"
+          :prop="`sop[${index}].value`"
+          :formatter="formatMarketingQuotationDatas"
+        />
       </el-table>
     </el-card>
     <el-card header="核心部件：" m="2">
@@ -157,7 +162,7 @@ const data = reactive<any>({
   sor: {
     sorFileName: "",
     fileId: null
-  },
+  }
 })
 
 const columns = reactive({
@@ -301,9 +306,9 @@ const downTrFile = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  const { result }: any = await getProductByAuditFlowId(auditFlowId);
-  ProductByAuditFlowId.value = result;
-  dialogVisible.value = true;
+  const { result }: any = await getProductByAuditFlowId(auditFlowId)
+  ProductByAuditFlowId.value = result
+  dialogVisible.value = true
 }
 
 const downLoad3D = async (productId: any) => {
@@ -344,10 +349,13 @@ const toNREPriceList = () => {
   })
 }
 
-watchEffect(() => { })
+watchEffect(() => {})
 </script>
 <style scoped lang="scss">
 .demandApply-result-page {
   margin: 10px;
+}
+* {
+  font-size: 20px;
 }
 </style>
