@@ -1,7 +1,14 @@
 <template>
   <el-card class="wrap m-2">
     <el-card class="table-wrap" header="电子料单价">
-      <el-table :data="electronicBomList" style="width: 100%" v-loading="loading" height="75vh">
+      <el-table
+        :data="electronicBomList"
+        style="width: 100%"
+        v-loading="loading"
+        height="75vh"
+        @selection-change="selectionChange"
+      >
+        <el-table-column type="selection" width="55" />
         <el-table-column prop="categoryName" label="物料大类" fixed="left" width="150" />
         <el-table-column prop="typeName" label="物料种类" fixed="left" width="150" />
         <el-table-column prop="sapItemNum" label="物料编号" fixed="left" width="150" />
@@ -92,7 +99,7 @@
             </el-select>
           </template> -->
         </el-table-column>
-        <el-table-column prop="peopleName" fixed="right" />
+        <el-table-column prop="peopleName" fixed="right" label="确认人" />
       </el-table>
       <el-descriptions :column="2" border>
         <el-descriptions-item v-for="item in allColums?.standardMoneyYears" :key="item" :label="`${item} 本位币汇总`">
@@ -117,7 +124,7 @@ import { GetBOMElectronicSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
-import { ElMessageBox } from "element-plus"
+import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 
 const { jumpTodoCenter } = useJump()
@@ -126,6 +133,8 @@ const { auditFlowId, productId }: any = getQuery()
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
 const loading = ref(true)
+const electronicId = ref([])
+const peopleId = ref<any[]>([])
 // 表单子列
 const allColums = reactive<any>({
   sop: []
@@ -205,6 +214,13 @@ const fetchSopYear = async () => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
+  if (!electronicId.value.length && !isAgree) {
+    ElMessage({
+      message: "请选择要退回那些条数据!",
+      type: "warning"
+    })
+    return
+  }
   let text = isAgree ? "您确定要同意嘛？" : "请输入拒绝理由"
   ElMessageBox[!isAgree ? "prompt" : "confirm"](text, "请审核", {
     confirmButtonText: "确定",
@@ -215,10 +231,18 @@ const handleSetBomState = (isAgree: boolean) => {
       isAgree,
       auditFlowId,
       bomCheckType: 3,
-      opinionDescription: !isAgree ? val?.value : ""
+      opinionDescription: !isAgree ? val?.value : "",
+      unitPriceId: electronicId.value,
+      peopleId: peopleId.value
     })
     if (success) jumpTodoCenter()
   })
+}
+
+//selectionChange 当选择项发生变化时会触发该事件
+const selectionChange = async (selection: any) => {
+  electronicId.value = selection.map((p: any) => p.id)
+  peopleId.value = [...new Set(selection.map((p: any) => p.peopleId))]
 }
 
 watchEffect(() => {})

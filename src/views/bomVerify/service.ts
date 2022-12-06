@@ -29,6 +29,8 @@ export function SetBomState(data: {
   bomCheckType: number
   isAgree: boolean
   opinionDescription: string
+  unitPriceId:Array<number>
+  peopleId:Array<number>
 }): any {
   return request({
     url: "/api/services/app/BomCheck/SetBomState",
