@@ -3,13 +3,15 @@
     <div>
       <ThreeDImage style="margin-left: 30px" />
     </div>
-    <el-card
-      v-for="item in constructionBomList"
-      :header="item.superTypeName"
-      :key="item.superTypeName"
-      class="table-wrap"
-    >
-      <el-table :data="item.structureMaterial" style="width: 100%" height="75vh" v-loading="loading">
+    <el-card v-for="(item, index) in constructionBomList" :header="item.superTypeName" :key="index" class="table-wrap">
+      <el-table
+        :data="item.structureMaterial"
+        style="width: 100%"
+        height="75vh"
+        v-loading="loading"
+        @selection-change="selectionChange($event, index)"
+      >
+        <el-table-column type="selection" width="55" />
         <el-table-column type="index" label="序号" width="70" fixed />
         <el-table-column prop="categoryName" label="物料大类" fixed width="150" />
         <el-table-column prop="typeName" label="物料种类" fixed width="150" />
@@ -79,7 +81,7 @@
         <el-table-column prop="rebateMoney" label="物料返利金额" />
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="eccnCode" label="物料管制状态" />
-        <el-table-column prop="peopleName" fixed="right" />
+        <el-table-column prop="peopleName" fixed="right" label="确认人" />
       </el-table>
       <el-descriptions :column="2" border>
         <el-descriptions-item
@@ -104,9 +106,10 @@ import { GetBOMStructuralSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
-import { ElMessageBox } from "element-plus"
+import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import ThreeDImage from "@/components/ThreeDImage/index.vue"
+import { set } from "js-cookie"
 
 const { jumpTodoCenter } = useJump()
 
@@ -114,6 +117,10 @@ const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
 const constructionBomList = ref<any[]>([])
+const constructionId = ref<any[]>([])
+const construction = ref<any[]>([])
+const peopleId = ref<any[]>([])
+const people = ref<any[]>([])
 const loading = ref(false)
 // 表单子列
 const allColums = reactive<any>({
@@ -122,7 +129,11 @@ const allColums = reactive<any>({
 
 const data = reactive({
   auditFlowId,
-  productId
+  productId,
+  construction,
+  people,
+  constructionId,
+  peopleId
 })
 
 const exchangeSelectOptions = ref<any>([])
@@ -185,6 +196,13 @@ const calculationAllStandardMoney = (structureMaterial: any) => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
+  if (!constructionId.value.length && !isAgree) {
+    ElMessage({
+      message: "请选择要退回那些条数据!",
+      type: "warning"
+    })
+    return
+  }
   let text = isAgree ? "您确定要同意嘛？" : "请输入拒绝理由"
   ElMessageBox[!isAgree ? "prompt" : "confirm"](text, "请审核", {
     confirmButtonText: "确定",
@@ -195,10 +213,20 @@ const handleSetBomState = (isAgree: boolean) => {
       isAgree,
       auditFlowId,
       bomCheckType: 4,
-      opinionDescription: !isAgree ? val.value : ""
+      opinionDescription: !isAgree ? val.value : "",
+      unitPriceId: constructionId.value,
+      peopleId: peopleId.value
     })
     if (success) jumpTodoCenter()
   })
+}
+
+//selectionChange 当选择项发生变化时会触发该事件
+const selectionChange = async (selection: any, index: number) => {
+  data.construction[index] = selection.map((p: any) => p.id)
+  data.people[index] = selection.map((p: any) => p.peopleId)
+  data.peopleId = [...new Set(data.people.flat(Infinity))]
+  data.constructionId = data.construction.flat(Infinity)
 }
 
 const fetchSopYear = async () => {
