@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeMount, reactive, watch } from "vue"
+import { onBeforeMount, reactive, watch, computed } from "vue"
 import { useRoute, useRouter, RouteLocationMatched } from "vue-router"
 import { compile } from "path-to-regexp"
 
@@ -31,9 +31,9 @@ const state = reactive({
     router.push(pathCompile(path)).catch((err) => {
       console.warn(err)
     })
-  }
+  },
+  flowName: window.sessionStorage.getItem("flowName") as string
 })
-
 watch(
   () => route.path,
   (path) => {
@@ -41,6 +41,7 @@ watch(
       return
     }
     state.getBreadcrumb()
+    state.flowName = window.sessionStorage.getItem("flowName") || ""
   }
 )
 
@@ -52,11 +53,15 @@ onBeforeMount(() => {
 <template>
   <el-breadcrumb class="app-breadcrumb">
     <transition-group name="breadcrumb">
+      <span class="breadcrumb_span"> {{ state.flowName }}</span>
       <el-breadcrumb-item v-for="(item, index) in state.breadcrumbs" :key="item.path">
-        <span v-if="item.redirect === 'noRedirect' || index === state.breadcrumbs.length - 1" class="no-redirect">{{
-          item.meta.title
-        }}</span>
-        <a v-else @click.prevent="state.handleLink(item)">
+        <span v-if="item.redirect === 'noRedirect' || index === state.breadcrumbs.length - 1" class="no-redirect"
+          >{{ item.meta.title }}
+        </span>
+        <!-- <a v-else @click.prevent="state.handleLink(item)">
+          {{ item.meta.title }}
+        </a> -->
+        <a v-else>
           {{ item.meta.title }}
         </a>
       </el-breadcrumb-item>
@@ -79,5 +84,8 @@ onBeforeMount(() => {
     color: #97a8be;
     cursor: text;
   }
+}
+.breadcrumb_span {
+  padding-left: 15px;
 }
 </style>
