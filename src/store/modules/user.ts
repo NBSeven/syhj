@@ -97,6 +97,7 @@ export const useUserStore = defineStore({
       this.roles = []
       resetRouter()
       window.localStorage.clear()
+      window.sessionStorage.clear()
       router.push({ path: "/login" })
     },
     /** 重置 token */
