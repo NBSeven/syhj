@@ -102,7 +102,7 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="报价形式:" prop="quotationType">
-              <el-select v-model="state.quoteForm.quotationType" placeholder="Select">
+              <el-select v-model="state.quoteForm.quotationType" placeholder="Select" @change="generateTitle">
                 <el-option
                   v-for="item in state.quotationTypeOptions"
                   :key="item.id"
@@ -159,8 +159,11 @@
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="150">
             <template #default="{ row }">
               <!-- {{ row.pcsYearList[index] }} -->
-              <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row)"
-               oninput="value=value.replace(/[^\d]/g,'')" />
+              <el-input
+                v-model="row.pcsYearList[index].quantity"
+                @change="pcsYearQuantitySum(row)"
+                oninput="value=value.replace(/[^\d]/g,'')"
+              />
             </template>
           </el-table-column>
           <el-table-column prop="rowSum" label="合计" width="150">
@@ -206,7 +209,7 @@
           </el-table-column>
           <el-table-column label="市场份额" width="180">
             <template #default="{ row }">
-              <el-input  v-model="row.marketShare" oninput="value=value.replace(/[^0-9.]/g,'')">
+              <el-input v-model="row.marketShare" oninput="value=value.replace(/[^0-9.]/g,'')">
                 <template #append>%</template>
               </el-input>
             </template>
@@ -225,8 +228,11 @@
           </el-table-column>
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)"
-              oninput="value=value.replace(/[^\d]/g,'')" />
+              <el-input
+                v-model="row.modelCountYearList[index].quantity"
+                @input="modelCountYearListQuantitySum(row)"
+                oninput="value=value.replace(/[^\d]/g,'')"
+              />
             </template>
           </el-table-column>
           <el-table-column label="模组总量" prop="modelTotal" width="180" :formatter="formatThousandths">
@@ -250,8 +256,8 @@
         <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
           <el-table-column label="年份" width="180" prop="year" />
           <el-table-column label="客户年降率(%)">
-            <template #default="{ row,$index}">
-              <el-input v-model="row.annualDeclineRate"  :disabled="!$index">
+            <template #default="{ row, $index }">
+              <el-input v-model="row.annualDeclineRate" :disabled="!$index">
                 <template #append>%</template>
               </el-input>
             </template>
@@ -407,7 +413,11 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.serialChipPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
+                  <el-input
+                    v-model="row.serialChipPrice"
+                    placeholder="单价"
+                    oninput="value=value.replace(/[^0-9.]/g,'')"
+                  >
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -524,7 +534,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户目标价（整套）:" prop="customerTargetPrice">
-              <el-input v-model="state.quoteForm.customerTargetPrice" oninput="value=value.replace(/[^0-9.]/g,'')"/>
+              <el-input v-model="state.quoteForm.customerTargetPrice" oninput="value=value.replace(/[^0-9.]/g,'')" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -1117,8 +1127,11 @@ const generateTitle = () => {
   let { quoteForm } = state
   let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYY-MM-DD")
   let userDepartment = quoteForm.draftingDepartment
+  let quotationTypeOptions = state.quotationTypeOptions
+    .filter((p: any) => p.id == quoteForm.quotationType)
+    .map((p: any) => p.displayName)
   let title = `${nowDate + userDepartment}关于${
-    quoteForm.customerName + quoteForm.projectName + "第" + state.quoteForm.quoteVersion + "版"
+    quoteForm.customerName + quoteForm.projectName + quotationTypeOptions + "第" + state.quoteForm.quoteVersion + "版"
   }的核价报价申请`
   state.quoteForm.title = title
 }
