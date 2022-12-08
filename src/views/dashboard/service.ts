@@ -120,6 +120,25 @@ export function SetPriceBoardState(
   })
 }
 
+// 核价审核
+export function SetPriceState(
+  auditFlowId: number,
+  isAgree: boolean,
+  opinionDescription: string,
+  backProcessIdentifiers?: any[]
+) {
+  return request({
+    url: "/api/services/app/PriceBoardCheck/SetPriceState",
+    method: "post",
+    data: {
+      auditFlowId,
+      isAgree,
+      backProcessIdentifiers,
+      opinionDescription
+    }
+  })
+}
+
 // 获取核价表模组的InputCount（投入量）和年份
 export function GetPriceEvaluationTableInputCount(auditFlowId: number) {
   return request({
