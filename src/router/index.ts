@@ -373,6 +373,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "核价看板"
         }
+      },
+      {
+        path: "/dashboardAudit/index",
+        component: () => import("@/views/dashboard/dashboardAudit/index.vue"),
+        name: "DashboardAudit",
+        meta: {
+          title: "核价看板审核"
+        }
       }
     ]
   },

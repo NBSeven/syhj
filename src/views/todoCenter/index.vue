@@ -151,7 +151,7 @@ const clickToPage = (row: any, scopeP: any) => {
     query.productId = window.sessionStorage.getItem("productId")
   }
   window.sessionStorage.setItem("flowName", scopeP.row.auditFlowTitle)
-
+  console.log(row.processIdentifier)
   router.push({
     path: `${pathItem.path}`,
     query
