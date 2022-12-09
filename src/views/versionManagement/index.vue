@@ -13,7 +13,7 @@
             <el-button type="primary" link>
               <a
                 target="_blank"
-                :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
+                :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}&projectName=${row.versionBasicInfo?.projectName}&version=${row.versionBasicInfo?.version}`"
               >
                 {{ row.versionBasicInfo.projectName }}
               </a>
