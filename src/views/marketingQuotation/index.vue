@@ -139,10 +139,12 @@ import { CommonDownloadFile } from "@/api/bom"
 import { GetPicture3DByAuditFlowId, getProductByAuditFlowId } from "../processImport/service"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
-
+import { useRoute } from "vue-router"
 const router = useRouter()
 const query = useJump()
-const { jumpTodoCenter, jumpPage } = query
+const route = useRoute()
+const { closeSelectedTag, jumpPage } = query
+
 const { auditFlowId = 1 }: any = getQuery()
 const dialogVisible = ref(false)
 const ProductByAuditFlowId = ref<any>({})
@@ -244,7 +246,10 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
       auditFlowId,
       backReason: !isAgree ? val?.value : ""
     })
-    if (success) jumpTodoCenter()
+    if (success) {
+      ElMessage.success("操作成功")
+      closeSelectedTag(route.path)
+    }
   })
 }
 const toProductPriceList = () => {

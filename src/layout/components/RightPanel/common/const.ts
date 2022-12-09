@@ -21,7 +21,8 @@ export const wahiteRotes: any[] = [
   "nreMarketingDepartment", // nre - 营销部nre
   "nrePricelist", // nre - 核价表nre
   "Dashboard", //核价看板
-  "DashboardAudit", //核价看板审核
+  "FinancePriceAudit", //财务部核价审核界面
+  "ProjectPriceAudit", //项目部核价审核界面
   "elecView",
   "strucView",
   "processImport", // 工序工时导入

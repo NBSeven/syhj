@@ -193,8 +193,8 @@
         </div>
       </el-card>
     </el-card>
-    <el-dialog v-model="dialogVisible" title="退回选择">
-      <el-checkbox-group v-model="checkList">
+    <el-dialog v-model="dialogVisible" title="退回">
+      <!-- <el-checkbox-group v-model="checkList">
         <el-checkbox label="StructBomImport">产品开发部-结构BOM录入</el-checkbox>
         <el-checkbox label="NreInputEmc">产品开发部-EMC实验费录入</el-checkbox>
         <el-checkbox label="ElectronicBomImport">产品开发部-电子BOM录入</el-checkbox>
@@ -208,7 +208,7 @@
         <el-checkbox label="NreInputMould">资源管理课-模具单价录入</el-checkbox>
         <el-checkbox label="StructPriceInput">资源管理课-结构单价录入</el-checkbox>
         <el-checkbox label="ElectronicPriceInput">资源管理课-电子单价录入</el-checkbox>
-      </el-checkbox-group>
+      </el-checkbox-group> -->
       <div>
         <div style="margin: 10px 0">拒绝理由：</div>
         <el-input type="textarea" v-model="opinionDescription" />
@@ -261,7 +261,7 @@ import {
   GetManufacturingCost,
   GetGoTable,
   addPricingPanelTrProgrammeId,
-  SetPriceBoardState,
+  SetFinancePriceState,
   GetPriceEvaluationTableInputCount,
   SetPriceEvaluationTableInputCount,
   CreatePriceEvaluationTable,
@@ -596,10 +596,10 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
   }).then(async () => {
     let res: any
     if (isAgree) {
-      res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value)
+      res = await SetFinancePriceState(auditFlowId, isAgree, opinionDescription.value)
     } else {
       if (opinionDescription.value) {
-        res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
+        res = await SetFinancePriceState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
       } else {
         ElMessage({
           type: "warning",

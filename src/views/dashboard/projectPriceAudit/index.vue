@@ -261,7 +261,7 @@ import {
   GetManufacturingCost,
   GetGoTable,
   addPricingPanelTrProgrammeId,
-  SetPriceState,
+  SetProjectPriceState,
   GetPriceEvaluationTableInputCount,
   SetPriceEvaluationTableInputCount,
   CreatePriceEvaluationTable,
@@ -276,8 +276,9 @@ import useJump from "@/hook/useJump"
 import router from "@/router"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import { getSummaries } from "./common/getSummaries"
-
-const { jumpTodoCenter } = useJump()
+import { useRoute } from "vue-router"
+const route = useRoute()
+const { closeSelectedTag } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 let costChart: any = null
@@ -595,10 +596,10 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
   }).then(async () => {
     let res: any
     if (isAgree) {
-      res = await SetPriceState(auditFlowId, isAgree, opinionDescription.value)
+      res = await SetProjectPriceState(auditFlowId, isAgree, opinionDescription.value)
     } else {
       if (opinionDescription.value) {
-        res = await SetPriceState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
+        res = await SetProjectPriceState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
       } else {
         ElMessage({
           type: "warning",
@@ -607,7 +608,7 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
       }
     }
     if (res.success) {
-      jumpTodoCenter()
+      closeSelectedTag(route.path)
       ElMessage({
         type: "success",
         message: "操作成功"
