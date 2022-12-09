@@ -120,15 +120,34 @@ export function SetPriceBoardState(
   })
 }
 
-// 核价审核
-export function SetPriceState(
+// 项目部核价审核
+export function SetProjectPriceState(
   auditFlowId: number,
   isAgree: boolean,
   opinionDescription: string,
   backProcessIdentifiers?: any[]
 ) {
   return request({
-    url: "/api/services/app/PriceBoardCheck/SetPriceState",
+    url: "/api/services/app/PriceBoardCheck/SetProjectPriceState",
+    method: "post",
+    data: {
+      auditFlowId,
+      isAgree,
+      backProcessIdentifiers,
+      opinionDescription
+    }
+  })
+}
+
+// 项目部核价审核
+export function SetFinancePriceState(
+  auditFlowId: number,
+  isAgree: boolean,
+  opinionDescription: string,
+  backProcessIdentifiers?: any[]
+) {
+  return request({
+    url: "/api/services/app/PriceBoardCheck/SetFinancePriceState",
     method: "post",
     data: {
       auditFlowId,

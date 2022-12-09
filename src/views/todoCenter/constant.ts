@@ -21,7 +21,8 @@ const urlMap = {
   NreInputGage: { path: "/nre/nreQCDepartment", query: {} }, //NRE检具费用录入界面"
   TradeApproval: { path: "/tradeCompliance/index", query: {} }, //贸易合规审核（结束流程&退回流程）
   PriceBoardAudit: { path: "/dashboard/index", query: {} }, //核价看板
-  PriceAudit: { path: "/dashboardAudit/index", query: {} }, //核价审核界面
+  ProjectPriceAudit: { path: "/projectPriceAudit/index", query: {} }, //项目部核价审核界面
+  FinancePriceAudit: { path: "/financePriceAudit/index", query: {} }, //财务部核价审核界面
   PriceCheckDownload: { path: "/quoteAnalysis/index", query: {} }, //"版本的核价表查看&下载界面（产品+NRE）"
   CostCheckNreFactor: { path: "/quoteAnalysis/index", query: {} }, //"成本信息表下载&填报NRE报价系数&产品报价看板界面"
   QuoteApproval: { path: "/marketingQuotation/index", query: {} }, //"总经理报价审批界面"
