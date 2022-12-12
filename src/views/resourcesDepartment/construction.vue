@@ -15,27 +15,32 @@
             <span class="card-span">
               未提交的数量:{{
               item.structureMaterial.filter((p: any) => !p.isSubmit).length
-              }}</span>
+              }}</span
+            >
           </div>
         </template>
         <el-table :data="item.structureMaterial" height="500">
           <el-table-column type="index" label="序号" width="80" fixed="left" />
-          <el-table-column prop="categoryName" label="物料大类" width="150" fixed="left" />
-          <el-table-column prop="typeName" label="物料种类" width="150" fixed="left" />
-          <el-table-column prop="sapItemNum" label="物料编号" width="150" fixed="left" />
-          <el-table-column prop="drawingNumName" label="图号名称" width="150" fixed="left" />
-          <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-          <el-table-column prop="materialName" label="材料" width="150" />
-          <el-table-column prop="weightNumber" label="重量g" width="150" />
-          <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
-          <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
-          <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
-          <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
-          <el-table-column prop="currency" label="币种" width="150">
+          <el-table-column prop="categoryName" label="物料大类" width="80" fixed="left" />
+          <el-table-column prop="typeName" label="物料种类" width="80" fixed="left" />
+          <el-table-column prop="sapItemNum" label="物料编号" width="80" fixed="left" />
+          <el-table-column prop="drawingNumName" label="图号名称" width="100" fixed="left" />
+          <el-table-column prop="overallDimensionSize" label="外形尺寸" width="80" />
+          <el-table-column prop="materialName" label="材料" width="80" />
+          <el-table-column prop="weightNumber" label="重量g" width="80" />
+          <el-table-column prop="moldingProcess" label="成型工艺" width="80" />
+          <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
+          <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
+          <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="100" />
+          <el-table-column prop="currency" label="币种" width="120">
             <template #default="scope">
               <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-                <el-option v-for="item in exchangeSelectOptions" :key="item.id" :label="item.exchangeRateKind"
-                  :value="item.exchangeRateKind" />
+                <el-option
+                  v-for="item in exchangeSelectOptions"
+                  :key="item.id"
+                  :label="item.exchangeRateKind"
+                  :value="item.exchangeRateKind"
+                />
               </el-select>
             </template>
           </el-table-column>
@@ -46,44 +51,57 @@
             </template>
           </el-table-column> -->
           <el-table-column prop="iginalCurrency" label="原币">
-            <el-table-column v-for="(item, iginalCurrencyIndex) in data?.sop"
-              :key="`construction-iginalCurrency${item}`" :label="`${item?.toString()}`"
-              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`" width="180">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="`construction-iginalCurrency${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
+              width="150"
+            >
               <template #default="scope">
-                <el-input-number v-if="scope.row.isEdit" v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
-                  controls-position="right" :min="0"
-                  @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)" />
+                <el-input-number
+                  v-if="scope.row.isEdit"
+                  v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
+                  controls-position="right"
+                  :min="0"
+                  @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
+                />
                 <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column prop="standardMoney" label="本位币">
-            <el-table-column v-for="(item, index) in data?.sop" :key="`construction-standardMoney${item}`"
-              :label="`${item?.toString()}`" :prop="`standardMoney[${index}].value`" width="180">
+            <el-table-column
+              v-for="(item, index) in data?.sop"
+              :key="`construction-standardMoney${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`standardMoney[${index}].value`"
+              width="150"
+            >
               <template #default="{ row }">
                 {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column prop="moq" label="MOQ" width="180">
+          <el-table-column prop="moq" label="MOQ" width="150">
             <template #default="{ row }">
               <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
               <span v-if="!row.isEdit">{{ row.moq }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
+          <el-table-column prop="rebateMoney" label="物料返利金额" width="150">
             <template #default="{ row }">
               <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
               <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="备注" width="180">
+          <el-table-column label="备注" width="120">
             <template #default="{ row }">
               <el-input v-if="row.isEdit" v-model="row.remark" />
               <span v-if="!row.isEdit">{{ row.remark }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="物料管制状态" width="180">
+          <el-table-column label="物料管制状态" width="130">
             <template #default="{ row }">
               <el-select v-model="row.eccnCode" :disabled="row.isSubmit">
                 <el-option label="ECCN" value="ECCN" />
@@ -94,16 +112,31 @@
             </template>
           </el-table-column>
           <el-table-column prop="peopleName" label="确认人" />
-          <el-table-column label="操作" fixed="right" width="200">
+          <el-table-column label="操作" fixed="right" width="160">
             <template #default="scope">
-              <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0, bomIndex, scope.$index)"
-                type="danger">确认</el-button>
-              <el-button v-if="scope.row.isEntering" :disabled="scope.row.isSubmit" link
-                @click="handleSubmit(scope.row, 1, bomIndex, scope.$index)" type="warning">
+              <el-button
+                link
+                :disabled="scope.row.isSubmit"
+                @click="handleSubmit(scope.row, 0, bomIndex, scope.$index)"
+                type="danger"
+                >确认</el-button
+              >
+              <el-button
+                v-if="scope.row.isEntering"
+                :disabled="scope.row.isSubmit"
+                link
+                @click="handleSubmit(scope.row, 1, bomIndex, scope.$index)"
+                type="warning"
+              >
                 提交
               </el-button>
-              <el-button v-if="!scope.row.isEdit" :disabled="scope.row.isSubmit" link
-                @click="handleEdit(scope.row, true)" type="primary">
+              <el-button
+                v-if="!scope.row.isEdit"
+                :disabled="scope.row.isSubmit"
+                link
+                @click="handleEdit(scope.row, true)"
+                type="primary"
+              >
                 修改
               </el-button>
               <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
@@ -111,8 +144,11 @@
           </el-table-column>
         </el-table>
         <el-descriptions :column="2" border>
-          <el-descriptions-item v-for="standardMoneyItem in data.sop" :key="standardMoneyItem"
-            :label="`${standardMoneyItem} 本位币汇总`">
+          <el-descriptions-item
+            v-for="standardMoneyItem in data.sop"
+            :key="standardMoneyItem"
+            :label="`${standardMoneyItem} 本位币汇总`"
+          >
             {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
           </el-descriptions-item>
         </el-descriptions>
@@ -231,12 +267,7 @@ const fetchModuleNumberData = async () => {
 }
 
 // 确认结构料单价行数据
-const handleSubmit = async (
-  record: any,
-  isSubmit: number,
-  bomIndex: number,
-  iginalCurrencyIndex: number
-) => {
+const handleSubmit = async (record: any, isSubmit: number, bomIndex: number, iginalCurrencyIndex: number) => {
   if (isSubmit) {
     //提交
     await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
@@ -244,19 +275,23 @@ const handleSubmit = async (
     //确认 先计算然后再提交
     await handleCalculationIginalCurrency(record, bomIndex, iginalCurrencyIndex).then(async () => {
       //判断本位币金额是否是否存在0
-      const prop = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].standardMoney.filter((p: any) => !p.value).length;
+      const prop = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].standardMoney.filter(
+        (p: any) => !p.value
+      ).length
       if (prop) {
-        ElMessageBox.confirm('该条数据本位币数据有0的存在,是否继续执行', '确认提醒', {
+        ElMessageBox.confirm("该条数据本位币数据有0的存在,是否继续执行", "确认提醒", {
           // if you want to disable its autofocus
           // autofocus: false,
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(async () => {
-          await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
-        }).catch(async ()=>{
-          fetchInitData()
+          confirmButtonText: "确认",
+          cancelButtonText: "取消",
+          type: "warning"
         })
+          .then(async () => {
+            await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+          })
+          .catch(async () => {
+            fetchInitData()
+          })
       } else {
         await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
       }
@@ -312,7 +347,7 @@ const handleEdit = (row: any, isEdit: boolean) => {
   row.isEdit = isEdit
 }
 
-watchEffect(() => { })
+watchEffect(() => {})
 </script>
 <style scoped lang="scss">
 .table-wrap {
