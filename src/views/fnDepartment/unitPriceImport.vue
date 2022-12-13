@@ -1,6 +1,16 @@
 <template>
   <div class="unitPrice-import">
     <div class="unitPrice-import__btn-container">
+      <div>
+        <el-form :model="data.searchForm" inline>
+          <el-form-item label="关键字">
+            <el-input v-model="data.searchForm.Filter" placeholder="物料编号/单据号" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="search">搜索</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
@@ -49,7 +59,8 @@ const data = reactive({
   },
   searchForm: {
     skipCount: 0,
-    maxResultCount: 20
+    maxResultCount: 20,
+    Filter: ""
   },
   pageNo: 1,
   total: 0
@@ -96,6 +107,9 @@ const getList = async () => {
   let res: any = await getUInitPrice(searchForm)
   data.tableData = res.result.items
   data.total = res.result.totalCount
+}
+const search = () => {
+  getList()
 }
 const handlePageChange = () => {
   getList()

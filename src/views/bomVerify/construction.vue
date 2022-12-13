@@ -13,18 +13,18 @@
       >
         <el-table-column type="selection" width="55" />
         <el-table-column type="index" label="序号" width="70" fixed />
-        <el-table-column prop="categoryName" label="物料大类" fixed width="150" />
-        <el-table-column prop="typeName" label="物料种类" fixed width="150" />
-        <el-table-column prop="sapItemNum" label="物料编号" fixed width="150" />
-        <el-table-column prop="drawingNumName" label="图号名称" fixed width="150" />
-        <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-        <el-table-column prop="materialName" label="材料" width="150" />
-        <el-table-column prop="weightNumber" label="重量g" width="150" />
-        <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
-        <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
-        <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
-        <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
-        <el-table-column prop="currency" label="币种" width="150">
+        <el-table-column prop="categoryName" label="物料大类" fixed width="80" />
+        <el-table-column prop="typeName" label="物料种类" fixed width="80" />
+        <el-table-column prop="sapItemNum" label="物料编号" fixed width="80" />
+        <el-table-column prop="drawingNumName" label="图号名称" fixed width="80" />
+        <el-table-column prop="overallDimensionSize" label="外形尺寸" width="80" />
+        <el-table-column prop="materialName" label="材料" width="80" />
+        <el-table-column prop="weightNumber" label="重量g" width="80" />
+        <el-table-column prop="moldingProcess" label="成型工艺" width="80" />
+        <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
+        <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
+        <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="80" />
+        <el-table-column prop="currency" label="币种" width="80">
           <template #default="scope">
             <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
               <el-option
@@ -57,7 +57,7 @@
             :key="`construction-iginalCurrency${item}`"
             :label="`${item?.toString()}`"
             :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
-            width="180"
+            width="80"
           >
             <template #default="{ row }">
               {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value).toFixed(3) || 0 }}
@@ -70,14 +70,14 @@
             :key="`construction-standardMoney${item}`"
             :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
-            width="180"
+            width="80"
           >
             <template #default="{ row }">
               {{ (row.standardMoney && row.standardMoney[index]?.value).toFixed(3) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column prop="moq" label="MOQ" width="150" />
+        <el-table-column prop="moq" label="MOQ" width="80" />
         <el-table-column prop="rebateMoney" label="物料返利金额" />
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="eccnCode" label="物料管制状态" />
