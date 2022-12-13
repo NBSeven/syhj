@@ -72,6 +72,15 @@ export function ToriginalCurrencyStructural(data: ElectronicDto): any {
   })
 }
 
+// 计算结构料单价录入 ==>根据年降计算
+export function PostStructuralMaterialCalculate(data: ElectronicDto): any {
+  return request({
+    url: "/api/services/app/ResourceEntering/PostStructuralMaterialCalculateSingle",
+    method: "post",
+    data
+  })
+}
+
 // 查看项目走量(获取某流程的项目走量)
 export function GetProjectGoQuantity(data: { Id: number }): any {
   return request({

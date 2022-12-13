@@ -32,6 +32,18 @@
           <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
           <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
           <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="100" />
+          <el-table-column prop="materialsUseCount" label="项目物料的使用量">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="item"
+              :label="`${item?.toString()}`"
+              width="120"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0 }}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
           <el-table-column prop="currency" label="币种" width="120">
             <template #default="scope">
               <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
@@ -43,6 +55,39 @@
                 />
               </el-select>
             </template>
+          </el-table-column>
+          <el-table-column prop="inTheRate" label="年降率">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="`construction-iginalCurrency${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`inTheRate[${iginalCurrencyIndex}].value`"
+              width="150"
+            >
+              <template #default="scope">
+                <el-input
+                  v-if="scope.row.isEdit"
+                  v-model="scope.row.inTheRate[iginalCurrencyIndex].value"
+                  @keyup.enter="handleCalculation(scope.row, bomIndex, scope.$index)"
+                  type="number"
+                >
+                  <template #append> % </template>
+                </el-input>
+                <span v-else>{{ scope.row?.inTheRate[iginalCurrencyIndex]?.value }}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="item"
+              :label="`${item?.toString()}`"
+              width="120"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
+              </template>
+            </el-table-column>
           </el-table-column>
           <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
@@ -166,6 +211,7 @@ import {
   GetStructural,
   PostStructuralMemberEntering,
   ToriginalCurrencyStructural,
+  PostStructuralMaterialCalculate,
   GetProjectGoQuantity
 } from "./common/request"
 import { useRouter } from "vue-router"
@@ -272,30 +318,60 @@ const handleSubmit = async (record: any, isSubmit: number, bomIndex: number, igi
     //提交
     await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
   } else {
-    //确认 先计算然后再提交
-    await handleCalculationIginalCurrency(record, bomIndex, iginalCurrencyIndex).then(async () => {
-      //判断本位币金额是否是否存在0
-      const prop = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].standardMoney.filter(
-        (p: any) => !p.value
-      ).length
-      if (prop) {
-        ElMessageBox.confirm("该条数据本位币数据有0的存在,是否继续执行", "确认提醒", {
-          // if you want to disable its autofocus
-          // autofocus: false,
-          confirmButtonText: "确认",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(async () => {
-            await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
-          })
-          .catch(async () => {
-            fetchInitData()
-          })
-      } else {
-        await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
-      }
+    //确认
+    await handleSubmitcalculate(record, isSubmit, bomIndex, iginalCurrencyIndex)
+  }
+}
+
+const handleSubmitcalculate = async (record: any, isSubmit: number, bomIndex: number, iginalCurrencyIndex: number) => {
+  //判断是根据年将率计算还是根据原币计算
+  var iszero = false
+  constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].iginalCurrency
+    ?.map((item: any) => {
+      return item.value
     })
+    ?.forEach((a: any) => {
+      if (a) {
+        iszero = true
+      }
+      return iszero
+    })
+
+  if (iszero) {
+    //根据原币计算
+    await handleCalculationIginalCurrency(record, bomIndex, iginalCurrencyIndex).then(async () => {
+      await SubmitJudge(record, isSubmit, bomIndex, iginalCurrencyIndex)
+    })
+  } else {
+    //年降本位币
+    await handleCalculation(record, bomIndex, iginalCurrencyIndex).then(async () => {
+      await SubmitJudge(record, isSubmit, bomIndex, iginalCurrencyIndex)
+    })
+    //根据年将率计算
+  }
+}
+
+const SubmitJudge = async (record: any, isSubmit: number, bomIndex: number, iginalCurrencyIndex: number) => {
+  //判断本位币金额是否是否存在0
+  const prop = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex].standardMoney.filter(
+    (p: any) => !p.value
+  ).length
+  if (prop) {
+    ElMessageBox.confirm("该条数据本位币数据有0的存在,是否继续执行", "确认提醒", {
+      // if you want to disable its autofocus
+      // autofocus: false,
+      confirmButtonText: "确认",
+      cancelButtonText: "取消",
+      type: "warning"
+    })
+      .then(async () => {
+        await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+      })
+      .catch(async () => {
+        fetchInitData()
+      })
+  } else {
+    await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
   }
 }
 
@@ -324,6 +400,24 @@ const submitFun = async (
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   data.sop = result || []
+}
+
+// 根据汇率计算
+const handleCalculation = async (row: any, bomIndex: number, index: number) => {
+  try {
+    constructionBomList.value[bomIndex].loading = true
+    const { success, result } = await PostStructuralMaterialCalculate(row)
+    if (!success && !result.length) {
+      constructionBomList.value[bomIndex].loading = false
+      throw Error()
+    }
+    const res = { ...(result || {}), isEdit: true }
+    constructionBomList.value[bomIndex].structureMaterial[index] = res
+    constructionBomList.value[bomIndex].loading = false
+  } catch (err) {
+    ElMessage.error("计算失败~")
+    constructionBomList.value[bomIndex].loading = false
+  }
 }
 
 // 根据原币计算
