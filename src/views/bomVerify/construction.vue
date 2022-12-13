@@ -24,6 +24,18 @@
         <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
         <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
         <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="80" />
+        <el-table-column prop="materialsUseCount" label="项目物料的使用量">
+          <el-table-column
+            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+            :key="item"
+            :label="`${item?.toString()}`"
+            width="80"
+          >
+            <template #default="scope">
+              <span>{{ scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0 }}</span>
+            </template>
+          </el-table-column>
+        </el-table-column>
         <el-table-column prop="currency" label="币种" width="80">
           <template #default="scope">
             <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
@@ -35,6 +47,32 @@
               />
             </el-select>
           </template>
+        </el-table-column>
+        <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+          <el-table-column
+            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+            :key="item"
+            :label="`${item?.toString()}`"
+            :prop="`systemiginalCurrency[${iginalCurrencyIndex}].value`"
+            width="80"
+          >
+            <template #default="scope">
+              <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column prop="inTheRate" label="年降率">
+          <el-table-column
+            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+            :key="`construction-iginalCurrency${item}`"
+            :label="`${item?.toString()}`"
+            :prop="`inTheRate[${iginalCurrencyIndex}].value`"
+            width="80"
+          >
+            <template #default="scope">
+              <span>{{ scope.row?.inTheRate[iginalCurrencyIndex]?.value }}</span>
+            </template>
+          </el-table-column>
         </el-table-column>
         <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
