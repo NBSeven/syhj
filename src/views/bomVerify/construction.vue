@@ -5,6 +5,7 @@
     </div>
     <el-card v-for="(item, index) in constructionBomList" :header="item.superTypeName" :key="index" class="table-wrap">
       <el-table
+        ref="multipleTableRef"
         :data="item.structureMaterial"
         style="width: 100%"
         height="75vh"
@@ -139,7 +140,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, watch, nextTick } from "vue"
 import { GetBOMStructuralSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
@@ -148,7 +149,12 @@ import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import ThreeDImage from "@/components/ThreeDImage/index.vue"
 import { set } from "js-cookie"
+import { useRouter } from "vue-router"
+import { json } from "stream/consumers"
+import { count } from "console"
+import { el } from "element-plus/es/locale"
 
+let router = useRouter()
 const { jumpTodoCenter } = useJump()
 
 const { auditFlowId, productId }: any = getQuery()
@@ -175,7 +181,7 @@ const data = reactive({
 })
 
 const exchangeSelectOptions = ref<any>([])
-
+const multipleTableRef = ref<any>()
 onBeforeMount(() => {
   fetchOptionsData()
   fetchSopYear()
@@ -183,9 +189,32 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  console.log(constructionBomList.value, "constructionBomList")
-  fetchConstructionInitData()
+  window.sessionStorage.setItem("placePath", router.currentRoute.value.path)
+  fetchConstructionInitData().then(() => {
+    const construction = window.sessionStorage.getItem("construction")
+    if (construction) {
+      let porp = JSON.parse(construction)
+      if (!porp) return
+      let isExist = porp.filter((p: any) => p.key == productId)
+      if (!isExist.length) return
+      const value = isExist[0].constructionId
+      toggleSelection(value) //数据反填
+    }
+  })
 })
+
+const toggleSelection = (Ids: any) => {
+  nextTick(() => {
+    Ids.forEach((id: any) => {
+      constructionBomList.value.forEach((item: any, index: number) => {
+        const row = item.structureMaterial.filter((p: any) => p.id == id)
+        if (row[0]) {
+          multipleTableRef.value[index]!.toggleRowSelection(row[0], true)
+        }
+      })
+    })
+  })
+}
 
 // const toFixedThree = (_recoed: any, _row: any, val: any) => {
 //   if (typeof val === "number" && val > 0) return val.toFixed(3)
@@ -209,13 +238,27 @@ const fetchConstructionInitData = async () => {
   try {
     loading.value = true
     const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
-    console.log(result, "获取初始化数据")
+    //console.log(result, "获取初始化数据")
     constructionBomList.value = result
     loading.value = false
   } catch {
     loading.value = false
   }
 }
+
+watch(
+  () => router.currentRoute.value.path,
+  (newValue, oldValue) => {
+    const path = window.sessionStorage.getItem("placePath")
+    if (path) {
+      //比较两个值是否一致
+      if (newValue != path) {
+        window.sessionStorage.removeItem("construction")
+      }
+    }
+  },
+  { immediate: true }
+)
 
 const calculationAllStandardMoney = (structureMaterial: any) => {
   let obj: any = {}
@@ -234,7 +277,27 @@ const calculationAllStandardMoney = (structureMaterial: any) => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
-  if (!constructionId.value.length && !isAgree) {
+  var construction = [[]]
+  var people = [[]]
+  var prop = window.sessionStorage.getItem("construction")
+  if (!prop && !isAgree) {
+    ElMessage({
+      message: "请选择要退回那些条数据!",
+      type: "warning"
+    })
+    return
+  } else {
+    if (prop) {
+      var constructionProp = JSON.parse(prop)
+      constructionProp.forEach((p: any) => {
+        construction.push(p.constructionId)
+        people.push(p.peopleId)
+      })
+    }
+  }
+  data.constructionId = [...new Set(construction.flat(Infinity))]
+  data.peopleId = [...new Set(people.flat(Infinity))]
+  if (!isAgree && (!data.constructionId.length || !data.peopleId.length)) {
     ElMessage({
       message: "请选择要退回那些条数据!",
       type: "warning"
@@ -252,8 +315,8 @@ const handleSetBomState = (isAgree: boolean) => {
       auditFlowId,
       bomCheckType: 4,
       opinionDescription: !isAgree ? val.value : "",
-      unitPriceId: constructionId.value,
-      peopleId: peopleId.value
+      unitPriceId: data.constructionId,
+      peopleId: data.peopleId
     })
     if (success) jumpTodoCenter()
   })
@@ -263,8 +326,50 @@ const handleSetBomState = (isAgree: boolean) => {
 const selectionChange = async (selection: any, index: number) => {
   data.construction[index] = selection.map((p: any) => p.id)
   data.people[index] = selection.map((p: any) => p.peopleId)
-  data.peopleId = [...new Set(data.people.flat(Infinity))]
-  data.constructionId = data.construction.flat(Infinity)
+  data.constructionId = data.construction.flat(Infinity) //上一个和下一个相加
+  data.peopleId = [...new Set(data.people.flat(Infinity))] //上一个和下一个相加
+  var prop = window.sessionStorage.getItem("construction")
+  var ConstructionId = [
+    {
+      key: productId,
+      constructionId: data.constructionId,
+      peopleId: data.peopleId
+    }
+  ]
+  if (prop) {
+    ConstructionId = JSON.parse(prop)
+    //判断有没有这个key
+    let isExist = ConstructionId.filter((p: any) => p.key == productId)
+    //console.log("ConstructionId", isExist)
+    if (isExist.length) {
+      ConstructionId.forEach((item: any, index: number) => {
+        //console.log("修改", item, productId)
+        if (item.key == productId) {
+          ConstructionId[index].constructionId = data.constructionId
+          ConstructionId[index].peopleId = data.peopleId
+        }
+      })
+    } else {
+      let propConstructionId = {
+        key: productId,
+        constructionId: data.constructionId,
+        peopleId: data.peopleId
+      }
+      ConstructionId.push(propConstructionId)
+      //console.log("添加")
+    }
+  } else {
+    let propConstructionId = {
+      key: productId,
+      constructionId: data.constructionId,
+      peopleId: data.peopleId
+    }
+    ConstructionId = []
+    ConstructionId.push(propConstructionId)
+    //console.log("直接添加")
+  }
+  //console.log("结果", ConstructionId)
+  window.sessionStorage.setItem("construction", JSON.stringify(ConstructionId))
 }
 
 const fetchSopYear = async () => {
