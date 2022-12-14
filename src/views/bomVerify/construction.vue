@@ -148,11 +148,7 @@ import getQuery from "@/utils/getQuery"
 import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import ThreeDImage from "@/components/ThreeDImage/index.vue"
-import { set } from "js-cookie"
 import { useRouter } from "vue-router"
-import { json } from "stream/consumers"
-import { count } from "console"
-import { el } from "element-plus/es/locale"
 
 let router = useRouter()
 const { jumpTodoCenter } = useJump()
