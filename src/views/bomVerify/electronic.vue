@@ -128,7 +128,6 @@ import getQuery from "@/utils/getQuery"
 import { ElMessageBox, ElMessage, ElTable } from "element-plus"
 import useJump from "@/hook/useJump"
 import { useRouter } from "vue-router"
-import { json } from "node:stream/consumers"
 let router = useRouter()
 const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
