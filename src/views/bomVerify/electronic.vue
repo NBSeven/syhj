@@ -6,6 +6,7 @@
         style="width: 100%"
         v-loading="loading"
         height="75vh"
+        ref="multipleTableRef"
         @selection-change="selectionChange"
       >
         <el-table-column type="selection" width="55" />
@@ -118,22 +119,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed, watch, nextTick } from "vue"
 import { ElectronicDto } from "../resourcesDepartment/data.type"
 import { GetBOMElectronicSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
-import { ElMessageBox, ElMessage } from "element-plus"
+import { ElMessageBox, ElMessage, ElTable } from "element-plus"
 import useJump from "@/hook/useJump"
-
+import { useRouter } from "vue-router"
+import { json } from "node:stream/consumers"
+let router = useRouter()
 const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
-
+const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
 const loading = ref(true)
-const electronicId = ref([])
+const electronicId = ref<any[]>([])
 const peopleId = ref<any[]>([])
 // 表单子列
 const allColums = reactive<any>({
@@ -155,9 +158,29 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-  fetchElectronicInitData()
+  window.sessionStorage.setItem("placePath", router.currentRoute.value.path)
+  fetchElectronicInitData().then(() => {
+    const construction = window.sessionStorage.getItem("construction")
+    if (construction) {
+      let porp = JSON.parse(construction)
+      if (!porp) return
+      let isExist = porp.filter((p: any) => p.key == productId)
+      if (!isExist.length) return
+      const value = isExist[0].constructionId
+      toggleSelection(value) //数据反填
+    }
+  })
 })
-
+const toggleSelection = (Ids: any) => {
+  nextTick(() => {
+    Ids.forEach((id: any) => {
+      const row = electronicBomList.value.filter((p: any) => p.id == id)
+      if (row[0]) {
+        multipleTableRef.value!.toggleRowSelection(row[0], true)
+      }
+    })
+  })
+}
 const fetchOptionsData = async () => {
   try {
     loading.value = true
@@ -171,7 +194,19 @@ const fetchOptionsData = async () => {
     loading.value = false
   }
 }
-
+watch(
+  () => router.currentRoute.value.path,
+  (newValue, oldValue) => {
+    const path = window.sessionStorage.getItem("placePath")
+    if (path) {
+      //比较两个值是否一致
+      if (newValue != path) {
+        window.sessionStorage.removeItem("construction")
+      }
+    }
+  },
+  { immediate: true }
+)
 // 计算总值
 const reduceArr = (arr: any[]) => {
   return arr.reduce((a, b) => a + b)
@@ -196,7 +231,7 @@ const allStandardMoney = computed(() => {
 // 获取电子料初始化数据
 const fetchElectronicInitData = async () => {
   const { result } = await GetBOMElectronicSingle(auditFlowId, productId)
-  console.log(result, "获取初始化数据")
+  //console.log(result, "获取初始化数据")
   electronicBomList.value = result
   // 初始化表头数据
   const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
@@ -214,7 +249,28 @@ const fetchSopYear = async () => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
-  if (!electronicId.value.length && !isAgree) {
+  var construction = [[]]
+  var people = [[]]
+  var prop = window.sessionStorage.getItem("construction")
+  if (!prop && !isAgree) {
+    ElMessage({
+      message: "请选择要退回那些条数据!",
+      type: "warning"
+    })
+    return
+  } else {
+    if (prop) {
+      var constructionProp = JSON.parse(prop)
+      constructionProp.forEach((p: any) => {
+        construction.push(p.constructionId)
+        people.push(p.peopleId)
+      })
+    }
+  }
+  electronicId.value = [...new Set(construction.flat(Infinity))]
+  peopleId.value = [...new Set(people.flat(Infinity))]
+
+  if (!isAgree && (!electronicId.value.length || !peopleId.value.length)) {
     ElMessage({
       message: "请选择要退回那些条数据!",
       type: "warning"
@@ -243,6 +299,49 @@ const handleSetBomState = (isAgree: boolean) => {
 const selectionChange = async (selection: any) => {
   electronicId.value = selection.map((p: any) => p.id)
   peopleId.value = [...new Set(selection.map((p: any) => p.peopleId))]
+  //multipleTableRef.value!.clearSelection()
+  var prop = window.sessionStorage.getItem("construction")
+  var ConstructionId = [
+    {
+      key: productId,
+      constructionId: electronicId.value,
+      peopleId: peopleId.value
+    }
+  ]
+  if (prop) {
+    ConstructionId = JSON.parse(prop)
+    //判断有没有这个key
+    let isExist = ConstructionId.filter((p: any) => p.key == productId)
+    //console.log("ConstructionId", isExist)
+    if (isExist.length) {
+      ConstructionId.forEach((item: any, index: number) => {
+        //console.log("修改", item, productId)
+        if (item.key == productId) {
+          ConstructionId[index].constructionId = electronicId.value
+          ConstructionId[index].peopleId = peopleId.value
+        }
+      })
+    } else {
+      let propConstructionId = {
+        key: productId,
+        constructionId: electronicId.value,
+        peopleId: peopleId.value
+      }
+      ConstructionId.push(propConstructionId)
+      //console.log("添加")
+    }
+  } else {
+    let propConstructionId = {
+      key: productId,
+      constructionId: electronicId.value,
+      peopleId: peopleId.value
+    }
+    ConstructionId = []
+    ConstructionId.push(propConstructionId)
+    //console.log("直接添加")
+  }
+  //console.log("结果", ConstructionId)
+  window.sessionStorage.setItem("construction", JSON.stringify(ConstructionId))
 }
 
 watchEffect(() => {})
