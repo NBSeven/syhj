@@ -136,14 +136,7 @@
         <el-table-column prop="userName" label="责任人" />
         <el-table-column prop="startTime" label="开始日期" :formatter="fomatterDate" />
         <el-table-column prop="roleName" label="修改人角色" />
-        <el-table-column label="完成日期" :formatter="fomatterDate">
-          <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <el-icon><timer /></el-icon>
-              <span style="margin-left: 10px">{{ scope.row.lastModifyTime }}</span>
-            </div>
-          </template>
-        </el-table-column>
+        <el-table-column label="完成日期" prop="lastModifyTime" :formatter="fomatterDate"> </el-table-column>
       </el-table>
     </el-card>
   </div>
