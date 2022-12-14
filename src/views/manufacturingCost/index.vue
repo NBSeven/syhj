@@ -209,13 +209,53 @@ onMounted(async () => {
       let { result } = (await getAllYearsFrom(auditFlowId)) as any
       data.years = result
       data.years.forEach((year) => {
-        data.smt.push({ year })
-        data.cob.push({ year })
-        data.other.push({ year })
+        data.smt.push({
+          year,
+          directLabor1: 0,
+          equipmentDepreciation1: 0,
+          lineChangeCost1: 0,
+          manufacturingExpenses1: 0,
+          directLabor2: 0,
+          equipmentDepreciation2: 0,
+          eauipmentDepreciation2: 0,
+          manufacturingExpenses2: 0
+        })
+        data.cob.push({
+          year,
+          directLabor1: 0,
+          equipmentDepreciation1: 0,
+          lineChangeCost1: 0,
+          manufacturingExpenses1: 0,
+          directLabor2: 0,
+          equipmentDepreciation2: 0,
+          eauipmentDepreciation2: 0,
+          manufacturingExpenses2: 0
+        })
+        data.other.push({ year, subtotal: 0 })
       })
-      data.smt.push({ year: 0 })
-      data.cob.push({ year: 0 })
-      data.other.push({ year: 0 })
+      data.smt.push({
+        year: 0,
+        directLabor1: 0,
+        equipmentDepreciation1: 0,
+        lineChangeCost1: 0,
+        manufacturingExpenses1: 0,
+        directLabor2: 0,
+        equipmentDepreciation2: 0,
+        eauipmentDepreciation2: 0,
+        manufacturingExpenses2: 0
+      })
+      data.cob.push({
+        year: 0,
+        directLabor1: 0,
+        equipmentDepreciation1: 0,
+        lineChangeCost1: 0,
+        manufacturingExpenses1: 0,
+        directLabor2: 0,
+        equipmentDepreciation2: 0,
+        eauipmentDepreciation2: 0,
+        manufacturingExpenses2: 0
+      })
+      data.other.push({ year: 0, subtotal: 0 })
     }
   }
 })
