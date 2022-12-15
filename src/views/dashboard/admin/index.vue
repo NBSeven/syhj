@@ -240,14 +240,14 @@
         <span>
           <el-button @click="data.createVisible = false">取消</el-button>
           <el-button @click="handleSetPriceEvaluationTableInputCount" type="primary">设置投入量和年份</el-button>
-          <el-button @click="handleCreatePriceEvaluation" type="primary">生成核价表</el-button>
+          <el-button @click="handleCreatePriceEvaluation" type="primary" :disabled="isPricing">生成核价表</el-button>
         </span>
       </template>
     </el-dialog>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted, onBeforeUnmount, onBeforeMount, ref } from "vue"
+import { reactive, onMounted, onBeforeUnmount, onBeforeMount, ref, computed } from "vue"
 import { dashboardPannel, percentageCostChartData, costChartData, selectCostChartData } from "./common/const"
 import {
   GetBomCost,
@@ -277,6 +277,7 @@ import router from "@/router"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import { getSummaries } from "./common/getSummaries"
 import { useRoute } from "vue-router"
+import { count } from "console"
 const route = useRoute()
 const { closeSelectedTag } = useJump()
 const { auditFlowId, productId }: any = getQuery()
@@ -376,6 +377,12 @@ const initChart = () => {
     costChart.resize()
   }
 }
+
+let isPricing = computed(() => {
+  let Pricing = data.priceEvaluationTableInputCount.map((p: any) => p.year)
+  let flag = Pricing.every((item: number) => !item)
+  return flag
+})
 
 // 获取核价表模组的InputCount（投入量）和年份
 const getPriceEvaluationTableInputCount = async () => {
