@@ -277,7 +277,7 @@ import router from "@/router"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import { getSummaries } from "./common/getSummaries"
 import { useRoute } from "vue-router"
-import { count } from "console"
+
 const route = useRoute()
 const { closeSelectedTag } = useJump()
 const { auditFlowId, productId }: any = getQuery()
