@@ -50,6 +50,135 @@
               <SearchDepartMentPerson v-model="formData.productManageId" roleName="生产管理部-物流成本录入员" />
             </el-form-item>
           </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="项目部核价审核员:">
+              <SearchDepartMentPerson v-model="formData.projectAuditorId" roleName="项目课长" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+
+      <el-card class="manager-operate__card">
+        <h4>期望时间</h4>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="营销要求核价完成时间:">
+              <el-date-picker type="date" v-model="formData.deadline" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="TR预计提交时间:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.trSubmitTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="产品部-电子工程师:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.elecEngineerTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="产品部-结构工程师:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.structEngineerTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="品质保证部-实验费用录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.qualityBenchTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="品质保证部-检具费用录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.qualityToolTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="资源管理部-电子资源开发:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.resourceElecTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="资源管理部-结构子资源开发:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.resourceStructTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="工程技术部-损耗率录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.engineerLossRateTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="工程技术部-工序工时录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.engineerWorkHourTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="生产管理部-物流成本录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.productManageTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="制造成本录入员:">
+              <el-date-picker
+                type="date"
+                placeholder="请输入预计提交时间"
+                v-model="formData.productCostInputTime"
+                value-format="YYYY-MM-DD"
+              />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-card>
       <el-card class="manager-operate__card">
@@ -93,14 +222,15 @@
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 
-import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref, watch, computed } from "vue"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
 import { PostManagement, getManagement } from "@/api/partEntry"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
-
+import { getPriceEvaluationStartData } from "../demandApply/service"
+import dayjs from "dayjs"
 let formData: any = reactive({
   fileId: null,
   isFirst: true,
@@ -115,7 +245,20 @@ let formData: any = reactive({
   qualityToolId: undefined,
   resourceElecId: 0,
   resourceStructId: 0,
-  structureEngineerId: undefined
+  structureEngineerId: undefined,
+  projectAuditorId: undefined, // 项目部核价审核员
+  trSubmitTime: "", // TR预计提交时间
+  elecEngineerTime: "", // 产品部-电子工程师期望完成时间
+  structEngineerTime: "", // 产品部-结构工程师期望完成时间
+  qualityBenchTime: "", // 品质保证部-实验室费用录入员期望完成时间
+  qualityToolTime: "", // 品质保证部-检具费用录入员期望完成时间
+  resourceElecTime: "", // // 资源管理部-电子资源开发期望完成时间
+  resourceStructTime: "", // 资源管理部-结构资源开发期望完成时间
+  engineerLossRateTime: "", // 工程技术部-损耗率录入员期望完成时间
+  engineerWorkHourTime: "", // 工程技术部-工序工时录入员期望完成时间
+  productManageTime: "", // 生成管理部-物流成本录入员期望完成时间
+  productCostInputTime: "", // 制造成本录入员期望完成时间
+  deadline: undefined
 })
 const fileList = ref<UploadUserFile[]>([])
 
@@ -141,6 +284,26 @@ const save = async () => {
     ElMessage.success("提交成功")
   }
 }
+
+watch(
+  () => {
+    return formData.trSubmitTime
+  },
+  (newValue) => {
+    formData.elecEngineerTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
+    formData.structEngineerTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
+    formData.qualityBenchTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
+    formData.qualityToolTime = dayjs(formData.trSubmitTime).add(1, "day").format("YYYY-MM-DD")
+    formData.resourceElecTime = dayjs(formData.trSubmitTime).add(3, "day").format("YYYY-MM-DD")
+    formData.resourceStructTime = dayjs(formData.trSubmitTime).add(3, "day").format("YYYY-MM-DD")
+    formData.engineerLossRateTime = dayjs(formData.trSubmitTime).add(3, "day").format("YYYY-MM-DD")
+    formData.engineerWorkHourTime = dayjs(formData.trSubmitTime).add(4, "day").format("YYYY-MM-DD")
+    formData.productManageTime = dayjs(formData.trSubmitTime).add(3, "day").format("YYYY-MM-DD")
+    formData.productCostInputTime = dayjs(formData.trSubmitTime).add(5, "day").format("YYYY-MM-DD")
+  },
+  { deep: true }
+)
+
 /**
  * 仓库
  */
@@ -162,6 +325,7 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let query = getQuery()
+
   if (query.auditFlowId) {
     formData.auditFlowId = Number(query.auditFlowId)
   }
@@ -180,6 +344,11 @@ onMounted(async () => {
         // url: res.result.fileId
       }
     ]
+  }
+  // 查看
+  let { result }: any = await getPriceEvaluationStartData(query.auditFlowId)
+  if (result) {
+    formData.deadline = result.deadline
   }
 })
 watchEffect(() => {})
