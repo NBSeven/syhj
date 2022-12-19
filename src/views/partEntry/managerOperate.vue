@@ -60,7 +60,7 @@
       </el-card>
 
       <el-card class="manager-operate__card">
-        <h4>期望时间</h4>
+        <h4>核价截止时间</h4>
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="营销要求核价完成时间:">
@@ -129,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="资源管理部-结构子资源开发:">
+            <el-form-item label="资源管理部-结构资源开发:">
               <el-date-picker
                 type="date"
                 placeholder="请输入预计提交时间"
@@ -290,6 +290,7 @@ watch(
     return formData.trSubmitTime
   },
   (newValue) => {
+    if (!formData.trSubmitTime) return
     formData.elecEngineerTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
     formData.structEngineerTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
     formData.qualityBenchTime = dayjs(formData.trSubmitTime).add(2, "day").format("YYYY-MM-DD")
