@@ -146,3 +146,21 @@ export function GetAuditFlowDeleteList(data:{auditFlowId: number}): any {
     data
   })
 }
+
+//获取流程删除记录表的数据
+export function GetTimeliness(data:{auditFlowId: number}): any {
+  return request({
+    url: "/api/services/app/Timeliness/GetTimeliness",
+    method: "get",
+    data
+  })
+}
+
+//写入时效性页面信息
+export function SetTimeliness(data:{auditFlowId: number,data:Array<{name:string,value:string}>}): any {
+  return request({
+    url: "/api/services/app/Timeliness/SetTimeliness",
+    method: "post",
+    data
+  })
+}
