@@ -35,12 +35,14 @@
           <template #default="scope">
             <el-tag
               :type="
-                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime
+                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime
                   ? `success`
                   : `danger`
               "
               >{{
-                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime ? "是" : "否"
+                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime
+                  ? "是"
+                  : "否"
               }}</el-tag
             >
           </template>
@@ -49,7 +51,7 @@
         <el-table-column prop="userName" label="责任人" />
         <el-table-column label="开始日期">
           <template #default="scope">
-            {{ fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].startTime) }}
+            {{ fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.startTime) }}
           </template>
         </el-table-column>
         <el-table-column prop="requiredTime" label="期望日期" :formatter="fomatterDate" />
@@ -57,7 +59,7 @@
         <el-table-column label="完成日期">
           <template #default="scope">
             {{
-              fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime)
+              fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime)
             }}
           </template>
         </el-table-column>
