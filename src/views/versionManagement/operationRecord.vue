@@ -2,107 +2,13 @@
   <div>
     <el-card class="table-wrap" :header="`项目名称:` + projectName + ` 版本号:` + version">
       <el-form :inline="true" :model="formInline" class="demo-form-inline" label-position="top">
-        <el-form-item label="客户">
-          <el-input v-model="formInline.user" placeholder="请输入客户信息" />
-        </el-form-item>
-        <el-form-item label="车型">
-          <el-input v-model="formInline.user" placeholder="请输入车型信息" />
-        </el-form-item>
-        <el-form-item label="产品类型">
-          <el-input v-model="formInline.user" placeholder="请输入产品类型" />
-        </el-form-item>
-        <el-form-item label="Sensor">
-          <el-input v-model="formInline.user" placeholder="请输入Sensor" />
-        </el-form-item>
-        <el-form-item label="Lens">
-          <el-input v-model="formInline.user" placeholder="请输入Lens" />
-        </el-form-item>
-        <el-form-item label="终端总量">
-          <el-input v-model="formInline.user" placeholder="请输入终端总量" />
-        </el-form-item>
-        <el-form-item label="关键节点">
-          <el-input v-model="formInline.user" placeholder="请输入关键节点" />
-        </el-form-item>
-        <el-form-item label="单目&多目">
-          <el-input v-model="formInline.user" placeholder="请输入单目&多目" />
-        </el-form-item>
-        <el-form-item label="Serial">
-          <el-input v-model="formInline.user" placeholder="请输入Serial" />
-        </el-form-item>
-        <el-form-item label="ISP">
-          <el-input v-model="formInline.user" placeholder="请输入ISP" />
-        </el-form-item>
-        <el-form-item label="业务">
-          <el-input v-model="formInline.user" placeholder="请输入与业务" />
-        </el-form-item>
-        <el-form-item label="PM">
-          <el-input v-model="formInline.user" placeholder="请输入PM" />
-        </el-form-item>
-        <el-form-item label="IP等级">
-          <el-input v-model="formInline.user" placeholder="请输入IP等级" />
-        </el-form-item>
-        <el-form-item label="Vcsel/LED">
-          <el-input v-model="formInline.user" placeholder="请输入Vcsel/LED" />
-        </el-form-item>
-        <el-form-item label="MCU">
-          <el-input v-model="formInline.user" placeholder="请输入MCU" />
-        </el-form-item>
-        <el-form-item label="结构">
-          <el-input v-model="formInline.user" placeholder="请输入结构" />
-        </el-form-item>
-        <el-form-item label="电子">
-          <el-input v-model="formInline.user" placeholder="请输入电子" />
-        </el-form-item>
-        <el-form-item label="NRE报价策略">
-          <el-input v-model="formInline.user" placeholder="请输入与NRE报价策略" />
-        </el-form-item>
-        <el-form-item label="线束">
-          <el-input v-model="formInline.user" placeholder="请输入线束" />
-        </el-form-item>
-        <el-form-item label="其他">
-          <el-input v-model="formInline.user" placeholder="其他" />
-        </el-form-item>
-        <el-form-item label="工艺">
-          <el-input v-model="formInline.user" placeholder="请输入工艺" />
-        </el-form-item>
-        <el-form-item label="IE">
-          <el-input v-model="formInline.user" placeholder="请输入IE" />
-        </el-form-item>
-        <el-form-item label="客户目标价">
-          <el-input v-model="formInline.user" placeholder="请输入客户目标价" />
-        </el-form-item>
-        <el-form-item label="包装方案">
-          <el-input v-model="formInline.user" placeholder="请输入包装方案" />
-        </el-form-item>
-        <el-form-item label="工艺方案">
-          <el-input v-model="formInline.user" placeholder="请输入工艺方案" />
-        </el-form-item>
-        <el-form-item label="治具">
-          <el-input v-model="formInline.user" placeholder="请输入治具" />
-        </el-form-item>
-        <el-form-item label="包装">
-          <el-input v-model="formInline.user" placeholder="请输入包装" />
-        </el-form-item>
-        <el-form-item label="报价策略">
-          <el-input v-model="formInline.user" placeholder="请输入报价策略" />
-        </el-form-item>
-        <el-form-item label="竞争对手">
-          <el-input v-model="formInline.user" placeholder="请输入竞争对手" />
-        </el-form-item>
-        <el-form-item label="可靠性">
-          <el-input v-model="formInline.user" placeholder="请输入可靠性" />
-        </el-form-item>
-        <el-form-item label="QE">
-          <el-input v-model="formInline.user" placeholder="请输入QE" />
-        </el-form-item>
-        <el-form-item label="月产能">
-          <el-input v-model="formInline.user" placeholder="月产能" />
-        </el-form-item>
-        <el-form-item label="其他">
-          <el-input v-model="formInline.user" placeholder="其他" />
-        </el-form-item>
+        <div v-for="(item, index) in Timeliness.values" :key="index">
+          <el-form-item :label="item.name">
+            <el-input v-model="item.value" :placeholder="`请输入` + item.name" />
+          </el-form-item>
+        </div>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" disabled>功能为开放</el-button>
+          <el-button type="primary" @click="onSubmit">保存</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -127,16 +33,48 @@
         <el-table-column prop="processName" label="界面名称" />
         <el-table-column label="是否完成">
           <template #default="scope">
-            <el-tag :type="scope.row.lastModifyTime ? `success` : `danger`">{{
-              scope.row.lastModifyTime ? "是" : "否"
-            }}</el-tag>
+            <el-tag
+              :type="
+                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime
+                  ? `success`
+                  : `danger`
+              "
+              >{{
+                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime ? "是" : "否"
+              }}</el-tag
+            >
           </template>
         </el-table-column>
         <el-table-column prop="version" label="版本" />
         <el-table-column prop="userName" label="责任人" />
-        <el-table-column prop="startTime" label="开始日期" :formatter="fomatterDate" />
+        <el-table-column label="开始日期">
+          <template #default="scope">
+            {{ fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].startTime) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="requiredTime" label="期望日期" :formatter="fomatterDate" />
         <el-table-column prop="roleName" label="修改人角色" />
-        <el-table-column label="完成日期" prop="lastModifyTime" :formatter="fomatterDate"> </el-table-column>
+        <el-table-column label="完成日期">
+          <template #default="scope">
+            {{
+              fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1].lastModifyTime)
+            }}
+          </template>
+        </el-table-column>
+        <el-table-column label="以往记录">
+          <template #default="scope">
+            <el-popover placement="right" :width="400" trigger="click">
+              <template #reference>
+                <el-button style="margin-right: 16px">记录</el-button>
+              </template>
+              <el-table :data="scope.row.auditFlowOperateTimes">
+                <el-table-column type="index" width="50" />
+                <el-table-column property="startTime" label="开始时间" :formatter="fomatterDate" />
+                <el-table-column property="lastModifyTime" label="结束时间" :formatter="fomatterDate" />
+              </el-table>
+            </el-popover>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -144,12 +82,13 @@
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted } from "vue"
-import { GetAuditFlowOperateReocrd } from "./service"
+import { GetAuditFlowOperateReocrd, GetTimeliness, SetTimeliness } from "./service"
 import getQuery from "@/utils/getQuery"
 import { formatDateTime } from "@/utils"
 import nameMap from "./constant"
 import { Timer } from "@element-plus/icons-vue"
 import type { TableColumnCtx } from "element-plus"
+import { ElMessage } from "element-plus"
 import { update } from "lodash"
 import { da } from "element-plus/es/locale"
 const { AuditFlowId, projectName, version }: any = getQuery()
@@ -167,11 +106,22 @@ const formInline = reactive({
   region: ""
 })
 
-const onSubmit = () => {
-  console.log("submit!")
+const Timeliness = reactive<any>([])
+
+const onSubmit = async () => {
+  let { success } = await SetTimeliness({ auditFlowId: AuditFlowId, data: Timeliness.values })
+  if (success) {
+    ElMessage.success("保存成功")
+  } else {
+    ElMessage.error("保存失败")
+  }
 }
 
 const fomatterDate = (_record: any, _: any, val: any) => {
+  return formatDateTime(val)
+}
+
+const fomatterDat1e = (val: any) => {
   return formatDateTime(val)
 }
 
@@ -224,6 +174,7 @@ const sortChange = async () => {
   arr.push(data.operationRecordData.filter((p: any) => p.classify == "报价归档"))
   arr.push(data.operationRecordData.filter((p: any) => p.classify == undefined))
   data.operationRecordData = arr.flat(Infinity)
+  console.log(data.operationRecordData, "12")
   getOrderNumber()
 }
 
@@ -251,8 +202,12 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
-onMounted(() => {
+onMounted(async () => {
   init()
+  let { result } = await GetTimeliness({ auditFlowId: AuditFlowId })
+  if (result) {
+    Timeliness.values = result.data
+  }
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 
