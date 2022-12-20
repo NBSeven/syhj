@@ -30,7 +30,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="工程技术部-工序工时录入员::">
+            <el-form-item label="工程技术部-工序工时录入员:">
               <SearchDepartMentPerson v-model="formData.engineerWorkHourId" roleName="工程技术部-工序工时录入员" />
             </el-form-item>
           </el-col>
@@ -64,7 +64,7 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="营销要求核价完成时间:">
-              <el-date-picker type="date" v-model="formData.deadline" />
+              <el-date-picker type="date" v-model="formData.deadline" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -79,12 +79,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="产品部-电子工程师:">
-              <el-date-picker
-                type="date"
-                placeholder="请输入预计提交时间"
-                v-model="formData.elecEngineerTime"
-                value-format="YYYY-MM-DD"
-              />
+              <el-date-picker type="date" placeholder="请输入预计提交时间" v-model="formData.elecEngineerTime" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -235,17 +230,17 @@ let formData: any = reactive({
   fileId: null,
   isFirst: true,
   auditFlowId: null,
-  electronicEngineerId: undefined,
-  engineerLossRateId: undefined,
-  engineerWorkHourId: undefined,
+  electronicEngineerId: undefined, //产品部-电子工程师
+  engineerLossRateId: undefined, //工程技术部-损耗率录入员
+  engineerWorkHourId: undefined, //工程技术部-工序工时录入员
   id: 0,
   productId: null,
-  productManageId: undefined,
-  qualityBenchId: undefined,
-  qualityToolId: undefined,
+  productManageId: undefined, //生产管理部-物流成本录入员
+  qualityBenchId: undefined, //品质保证部-实验费用录入员
+  qualityToolId: undefined, //品质保证部-检具费用录入员
   resourceElecId: 0,
   resourceStructId: 0,
-  structureEngineerId: undefined,
+  structureEngineerId: undefined, //产品部-结构工程师
   projectAuditorId: undefined, // 项目部核价审核员
   trSubmitTime: "", // TR预计提交时间
   elecEngineerTime: "", // 产品部-电子工程师期望完成时间
@@ -261,7 +256,6 @@ let formData: any = reactive({
   deadline: undefined
 })
 const fileList = ref<UploadUserFile[]>([])
-
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   if (res.success) {
     formData.fileId = res.result.fileId
@@ -279,6 +273,20 @@ const options = [
   }
 ]
 const save = async () => {
+  if (
+    !formData.electronicEngineerId ||
+    !formData.structureEngineerId ||
+    !formData.engineerLossRateId ||
+    !formData.engineerWorkHourId ||
+    !formData.qualityBenchId ||
+    !formData.qualityToolId ||
+    !formData.productManageId ||
+    !formData.projectAuditorId
+  ) {
+    ElMessage.warning("请正确选择核价团队")
+    return
+  }
+
   let res: any = await PostManagement(formData)
   if (res?.success) {
     ElMessage.success("提交成功")
@@ -326,9 +334,13 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let query = getQuery()
-
   if (query.auditFlowId) {
     formData.auditFlowId = Number(query.auditFlowId)
+    // 查看
+    let { result }: any = await getPriceEvaluationStartData(query.auditFlowId)
+    if (result) {
+      formData.deadline = result.deadline
+    }
   }
   if (query.productId) {
     formData.productId = Number(query.productId)
@@ -337,7 +349,7 @@ onMounted(async () => {
     let res: any = await getManagement(query.auditFlowId)
     let keys = Object.keys(formData)
     keys.forEach((key) => {
-      formData[key] = res.result[key]
+      if (key != "deadline") formData[key] = res.result[key]
     })
     fileList.value = [
       {
@@ -345,11 +357,6 @@ onMounted(async () => {
         // url: res.result.fileId
       }
     ]
-  }
-  // 查看
-  let { result }: any = await getPriceEvaluationStartData(query.auditFlowId)
-  if (result) {
-    formData.deadline = result.deadline
   }
 })
 watchEffect(() => {})
