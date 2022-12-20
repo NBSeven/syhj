@@ -1086,14 +1086,16 @@ watch(
       moduleTableData.value.forEach((row: any) => {
         row.modelCountYearList.forEach((item: any, index: any) => {
           if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
-            item.quantity =
+            item.quantity = Math.round(
               (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * state.sumArr[index]) / 10000
+            )
           }
         })
       })
       if (item.marketShare && item.moduleCarryingRate && item.singleCarProductsQuantity && state.carAnnualTotal) {
-        item.modelTotal =
+        item.modelTotal = Math.round(
           (item.marketShare * item.moduleCarryingRate * item.singleCarProductsQuantity * state.carAnnualTotal) / 10000
+        )
       }
     })
   },
