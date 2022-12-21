@@ -159,11 +159,7 @@
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="150">
             <template #default="{ row }">
               <!-- {{ row.pcsYearList[index] }} -->
-              <el-input
-                v-model="row.pcsYearList[index].quantity"
-                @change="pcsYearQuantitySum(row)"
-                oninput="value=value.replace(/[^\d]/g,'')"
-              />
+              <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row, index)" />
             </template>
           </el-table-column>
           <el-table-column prop="rowSum" label="合计" width="150">
@@ -843,12 +839,28 @@ const fileList = ref<UploadUserFile[]>([])
 const yearCount = ref(0)
 let route = useRoute()
 let router = useRouter()
-const pcsYearQuantitySum = (row: Pcs) => {
+const pcsYearQuantitySum = (row: Pcs, count: number) => {
+  var numReg = /[^\d]/g
+  var numRe = new RegExp(numReg)
   let rowSum = 0
-  row.pcsYearList.forEach((item: any) => {
+  row.pcsYearList.forEach((item: any, index: number) => {
+    if (numRe.test(item.quantity) && count == index) {
+      ElMessage.warning("不能输入小数以及特殊符号!")
+      item.quantity = ""
+    }
     rowSum = rowSum + Number(item.quantity)
   })
   row.rowSum = rowSum
+}
+const oninputFun = (row: Pcs, count: number) => {
+  var numReg = /[^\d]/g
+  var numRe = new RegExp(numReg)
+  row.pcsYearList.forEach((item: any, index: number) => {
+    if (numRe.test(item.quantity) && count == index) {
+      ElMessage.warning("不能输入小数以及特殊符号!")
+      item.quantity = ""
+    }
+  })
 }
 const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   if (cellValue) {
@@ -888,7 +900,6 @@ const save = async (formEl: FormInstance | undefined) => {
     console.log(fileList)
     if (valid) {
       saveloading.value = true
-
       let { quoteForm } = state
       quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : null
       quoteForm.pcs = pcsTableData
@@ -898,7 +909,7 @@ const save = async (formEl: FormInstance | undefined) => {
       quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
       try {
         let res: any = await saveApplyInfo(quoteForm)
-        console.log(res)
+        console.log(quoteForm, "quoteForm")
         if (res.success) {
           ElMessage({
             type: "success",
