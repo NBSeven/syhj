@@ -1,5 +1,6 @@
 <template>
   <div style="padding: 0 10px">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
@@ -108,7 +109,8 @@ import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
 import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "TestCostInputter"
 const { auditFlowId, productId }: any = getQuery()
 
 /**

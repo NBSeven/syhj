@@ -1,5 +1,6 @@
 <template>
   <div class="bom-loss">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="card">
       <template #header>
         <div class="card-header">
@@ -33,6 +34,8 @@ import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import _ from "lodash"
 
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "LossRateInputter"
 /**
  * 路由对象
  */

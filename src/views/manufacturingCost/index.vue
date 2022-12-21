@@ -3,6 +3,7 @@
     <!-- <div style="float: right; margin: 20px 10px">
       <el-button @click="addsmt" type="primary">新增</el-button>
     </div> -->
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card header="SMT" m="2">
       <el-table :data="data.smt" border style="margin: 20px 0" height="500">
         <el-table-column prop="year" label="年份" width="180">
@@ -166,7 +167,8 @@ import { ElMessage } from "element-plus"
 import { getAllYearsFrom, manufacturingCostInput, getInputManufacturingCost } from "./service"
 import getQuery from "@/utils/getQuery"
 let { auditFlowId, productId: modelCountId } = getQuery()
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "FinanceProductCostInputter"
 // import { useRoute, useRouter } from "vue-router"
 /**
  * 仓库
