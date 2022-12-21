@@ -1,5 +1,6 @@
 <template>
   <div style="padding: 0 10px">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
@@ -68,7 +69,8 @@ import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "GageCostInputter"
 const { auditFlowId, productId }: any = getQuery()
 
 /**

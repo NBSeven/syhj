@@ -1,4 +1,5 @@
 <template>
+  <InterfaceRequiredTime :ProcessIdentifier="Host" />
   <div style="padding: 0 10px">
     <el-card class="card-warp">
       <template #header>
@@ -136,7 +137,8 @@ import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
 import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "ElectronicsEngineer"
 const fileList = ref<UploadUserFile[]>([])
 
 const deleteLaboratoryFeeModel = (i: number) => {

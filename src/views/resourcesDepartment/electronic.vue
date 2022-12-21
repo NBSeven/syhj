@@ -1,5 +1,6 @@
 <template>
   <div class="margin-top">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="table-wrap" v-loading="tableLoading">
       <template #header>
         <div class="card-header">
@@ -184,7 +185,8 @@ import {
 } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import getQuery from "@/utils/getQuery"
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "ElectronicsPriceInputter"
 const { auditFlowId = 1, productId }: any = getQuery()
 
 // // 获取仓库的值

@@ -1,5 +1,6 @@
 <template>
   <div class="margin-top">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-row justify="end">
       <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
       <ThreeDImage m="2" />
@@ -215,7 +216,8 @@ import {
   GetProjectGoQuantity
 } from "./common/request"
 import { useRouter } from "vue-router"
-
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "StructuralPriceInputter"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"

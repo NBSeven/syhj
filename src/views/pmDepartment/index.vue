@@ -1,5 +1,6 @@
 <template>
   <div class="pm-department">
+    <InterfaceRequiredTime style="float: right" :ProcessIdentifier="Host" />
     <div class="pm-department__btn-container">
       <el-button type="primary" @click="getSorFile">SOR查看</el-button>
       <el-button type="primary" @click="data.dialogFormVisible = true">查看物流&包装基础数据</el-button>
@@ -147,6 +148,8 @@ import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import { CommonDownloadFile } from "@/api/bom"
 
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "LogisticsCostInputter"
 // import { useRoute, useRouter } from "vue-router"
 /**
  * 路由对象
@@ -190,10 +193,10 @@ watch(
   (value) => {
     if (value) {
       value.forEach((row: any) => {
-          row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
+        row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
 
-          row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
-        })
+        row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
+      })
     }
   },
   { deep: true }

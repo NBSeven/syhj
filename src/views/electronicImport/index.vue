@@ -1,5 +1,6 @@
 <template>
   <div class="electronic-import">
+    <InterfaceRequiredTime style="float: right" :ProcessIdentifier="Host" />
     <CustomerSpecificity />
     <TrDownLoad />
     <div class="electronic-import__btn-container">
@@ -76,9 +77,10 @@ import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import ProductInfo from "@/components/ProductInfo/index.vue"
 import TrDownLoad from "@/components/TrDownLoad/index.vue"
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
 
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
-
+let Host: string = "ElectronicsEngineer"
 let auditFlowId: any = null
 let productId: any = null
 const data = reactive({

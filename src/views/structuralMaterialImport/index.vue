@@ -1,5 +1,6 @@
 <template>
   <div class="electronic-import">
+    <InterfaceRequiredTime style="float: right" :ProcessIdentifier="Host" />
     <CustomerSpecificity />
     <TrDownLoad />
     <div class="electronic-import__btn-container">
@@ -63,7 +64,7 @@
             <template #append>cm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="外包装宽" prop="outerPackagingWidth" >
+        <el-form-item label="外包装宽" prop="outerPackagingWidth">
           <el-input v-model="data.logisticsForm.outerPackagingWidth" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>cm</template>
           </el-input>
@@ -74,13 +75,13 @@
           </el-input>
         </el-form-item>
         <h6>重量</h6>
-        <el-form-item label="单个产品重量" prop="singleProductWeight" >
+        <el-form-item label="单个产品重量" prop="singleProductWeight">
           <el-input v-model="data.logisticsForm.singleProductWeight" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>kg</template>
           </el-input>
         </el-form-item>
         <el-form-item label="单箱数量" prop="singleBoxQuantity">
-          <el-input v-model="data.logisticsForm.singleBoxQuantity"  oninput="value=value.replace(/[^\d]/g,'')">
+          <el-input v-model="data.logisticsForm.singleBoxQuantity" oninput="value=value.replace(/[^\d]/g,'')">
             <template #append>pcs</template>
           </el-input>
         </el-form-item>
@@ -107,12 +108,12 @@
             <el-option label="否" value="0" />
           </el-select>
         </el-form-item>
-        <el-form-item label="每托盘箱数" prop="boxesPerPallet" >
+        <el-form-item label="每托盘箱数" prop="boxesPerPallet">
           <el-input v-model="data.logisticsForm.boxesPerPallet" oninput="value=value.replace(/[^\d]/g,'')">
             <template #append> 箱/托</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="单箱包装数量" prop="quantityPerBox" >
+        <el-form-item label="单箱包装数量" prop="quantityPerBox">
           <el-input v-model="data.logisticsForm.quantityPerBox" oninput="value=value.replace(/[^\d]/g,'')">
             <template #append> PCS/箱</template>
           </el-input>
@@ -148,6 +149,8 @@ import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import TrDownLoad from "@/components/TrDownLoad/index.vue"
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "StructuralEngineer"
 const refForm = ref<FormInstance>()
 let auditFlowId: any = null
 let productId: any = null

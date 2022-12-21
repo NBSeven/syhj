@@ -1,5 +1,6 @@
 <template>
   <div class="bom-loss">
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="card">
       <template #header>
         <div class="card-header">
@@ -40,6 +41,8 @@ import getQuery from "@/utils/getQuery"
 import _ from "lodash"
 // import useJump from "@/hook/useJump"
 
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "LossRateInputter"
 // const { jumpTodoCenter } = useJump()
 /**
  * 路由对象
