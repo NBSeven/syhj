@@ -149,7 +149,7 @@ import getQuery from "@/utils/getQuery"
 import { CommonDownloadFile } from "@/api/bom"
 
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "LogisticsCostInputter"
+let Host: string = "LogisticsCostInput"
 // import { useRoute, useRouter } from "vue-router"
 /**
  * 路由对象

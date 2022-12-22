@@ -1,5 +1,5 @@
 <template>
-  <el-tag class="tagsize" round>期望完成日期:{{ value }}</el-tag>
+  <el-tag class="tagsize" :type="isQualified(value)" round>时间要求:&lt;{{ value }}</el-tag>
 </template>
 
 <script lang="ts" setup>
@@ -8,13 +8,25 @@ import type { FormInstance } from "element-plus"
 import { getPermissionList } from "./InterfaceRequiredTime"
 import getQuery from "@/utils/getQuery"
 let { auditFlowId } = getQuery()
-const value = ref<string>()
+const value = ref<string>("")
 const props = defineProps({
   ProcessIdentifier: {
     type: String,
     required: true
   }
 })
+
+const isQualified = (prop: string) => {
+  //判断是是否存在
+  if (!prop) {
+    return "warning"
+  }
+  //判断是否大于当前时间
+  if (new Date() > new Date(prop)) {
+    return "danger"
+  }
+  return ""
+}
 
 onMounted(async () => {
   console.log(auditFlowId, props.ProcessIdentifier)

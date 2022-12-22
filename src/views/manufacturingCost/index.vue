@@ -168,7 +168,7 @@ import { getAllYearsFrom, manufacturingCostInput, getInputManufacturingCost } fr
 import getQuery from "@/utils/getQuery"
 let { auditFlowId, productId: modelCountId } = getQuery()
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "FinanceProductCostInputter"
+let Host: string = "ProductionCostInput"
 // import { useRoute, useRouter } from "vue-router"
 /**
  * 仓库

@@ -186,7 +186,7 @@ import {
 import { getExchangeRate } from "./../demandApply/service"
 import getQuery from "@/utils/getQuery"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "ElectronicsPriceInputter"
+let Host: string = "ElectronicPriceInput"
 const { auditFlowId = 1, productId }: any = getQuery()
 
 // // 获取仓库的值

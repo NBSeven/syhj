@@ -80,7 +80,7 @@ import TrDownLoad from "@/components/TrDownLoad/index.vue"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
 
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
-let Host: string = "ElectronicsEngineer"
+let Host: string = "ElectronicBomImport"
 let auditFlowId: any = null
 let productId: any = null
 const data = reactive({
