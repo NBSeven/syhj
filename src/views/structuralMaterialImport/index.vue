@@ -150,7 +150,7 @@ import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import TrDownLoad from "@/components/TrDownLoad/index.vue"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "StructuralEngineer"
+let Host: string = "StructBomImport"
 const refForm = ref<FormInstance>()
 let auditFlowId: any = null
 let productId: any = null

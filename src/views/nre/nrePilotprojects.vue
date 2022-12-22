@@ -138,7 +138,7 @@ import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
 import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "ElectronicsEngineer"
+let Host: string = "NreInputEmc"
 const fileList = ref<UploadUserFile[]>([])
 
 const deleteLaboratoryFeeModel = (i: number) => {

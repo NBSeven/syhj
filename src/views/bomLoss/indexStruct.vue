@@ -42,7 +42,7 @@ import _ from "lodash"
 // import useJump from "@/hook/useJump"
 
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "LossRateInputter"
+let Host: string = "StructLossRateInput"
 // const { jumpTodoCenter } = useJump()
 /**
  * 路由对象

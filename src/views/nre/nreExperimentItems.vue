@@ -110,7 +110,7 @@ import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
 import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "TestCostInputter"
+let Host: string = "NreInputTest"
 const { auditFlowId, productId }: any = getQuery()
 
 /**

@@ -70,7 +70,7 @@ import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "GageCostInputter"
+let Host: string = "NreInputGage"
 const { auditFlowId, productId }: any = getQuery()
 
 /**

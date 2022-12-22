@@ -208,7 +208,7 @@ import { CommonDownloadFile } from "@/api/bom"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import { GetPicture3DByAuditFlowId } from "./service"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "ManHourInputter"
+let Host: string = "ManHourImport"
 const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({

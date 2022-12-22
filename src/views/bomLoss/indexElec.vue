@@ -35,7 +35,7 @@ import getQuery from "@/utils/getQuery"
 import _ from "lodash"
 
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "LossRateInputter"
+let Host: string = "ElecLossRateInput"
 /**
  * 路由对象
  */

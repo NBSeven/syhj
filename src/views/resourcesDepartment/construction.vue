@@ -217,7 +217,7 @@ import {
 } from "./common/request"
 import { useRouter } from "vue-router"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
-let Host: string = "StructuralPriceInputter"
+let Host: string = "StructPriceInput"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
