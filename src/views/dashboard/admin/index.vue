@@ -239,8 +239,15 @@
       <template #footer>
         <span>
           <el-button @click="data.createVisible = false">取消</el-button>
-          <el-button @click="handleSetPriceEvaluationTableInputCount" type="primary">设置投入量和年份</el-button>
-          <el-button @click="handleCreatePriceEvaluation" type="primary" :disabled="isPricing">生成核价表</el-button>
+          <el-button @click="handleSetPriceEvaluationTableInputCount" :disabled="isPricing" type="primary"
+            >设置投入量和年份</el-button
+          >
+          <el-button
+            @click="handleCreatePriceEvaluation"
+            type="primary"
+            :disabled="isPricing || isHandleCreatePriceEvaluation"
+            >生成核价表</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -281,7 +288,7 @@ import { useRoute } from "vue-router"
 const route = useRoute()
 const { closeSelectedTag } = useJump()
 const { auditFlowId, productId }: any = getQuery()
-
+let isHandleCreatePriceEvaluation: any = true
 let costChart: any = null
 let percentageCostChart: any = null
 let selectCostChart: any = null
@@ -670,6 +677,7 @@ const handleSetPriceEvaluationTableInputCount = debounce(async () => {
     modelCountInputCount: data.priceEvaluationTableInputCount.map((item: any) => ({ ...item, modelCountId: item.id }))
   })
   ElMessage.success("设置成功！")
+  isHandleCreatePriceEvaluation = false
   getPriceEvaluationTableInputCount()
 }, 500)
 </script>
