@@ -231,7 +231,7 @@ const fetchPriceEvaluationTableResult = async () => {
 const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
-  data.allPrice = result.lossRateCount?.toFixed(2) || 0
+  data.allPrice = result.electronicSumValue?.toFixed(2) || 0
   data.totalCost = result.totalCost?.toFixed(2) || 0
   data.lossCount = result.lossCount?.toFixed(2) || 0
   data.allTotalMoneyCyn = result.totalMoneyCynCount?.toFixed(2) || 0
