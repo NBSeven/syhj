@@ -380,8 +380,11 @@ const initChart = () => {
 
 let isPricing = computed(() => {
   let Pricing = data.priceEvaluationTableInputCount.map((p: any) => p.year)
-  let flag = Pricing.every((item: number) => !item)
-  return flag
+  let inputCount = data.priceEvaluationTableInputCount.map((p: any) => p.inputCount)
+  console.log(data.priceEvaluationTableInputCount, "data.priceEvaluationTableInputCount")
+  let flag = Pricing.every((item: number) => item != null)
+  let flag2 = inputCount.every((item: number) => item != null)
+  return !flag || !flag2
 })
 
 // 获取核价表模组的InputCount（投入量）和年份
