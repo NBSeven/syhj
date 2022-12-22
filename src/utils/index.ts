@@ -8,6 +8,15 @@ export const formatDateTime = (time: any) => {
   const date = new Date(time)
   return dayjs(date).format("YYYY-MM-DD HH:mm:ss")
 }
+
+/** 格式化时间 */
+export const formatDateTimeDLY = (time: any,DLY:string) => {
+  if (time == null || time === "") {
+    return "N/A"
+  }
+  const date = new Date(time)
+  return dayjs(date).format(DLY)
+}
 /** 下载excel */
 export const downloadFileExcel = (res: any, fileName: string) => {
   const blob = res

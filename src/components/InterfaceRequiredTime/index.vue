@@ -1,11 +1,14 @@
 <template>
-  <el-tag class="tagsize" :type="isQualified(value)" round>时间要求:&lt;{{ value }}</el-tag>
+  <el-tag class="tagsize" :type="isQualified(value)" round
+    >时间要求:&lt;{{ formatDateTimeDLY(value, "YYYY-MM-DD") }}</el-tag
+  >
 </template>
 
 <script lang="ts" setup>
 import { reactive, PropType, ref, watch, onMounted } from "vue"
 import type { FormInstance } from "element-plus"
 import { getPermissionList } from "./InterfaceRequiredTime"
+import { formatDateTimeDLY } from "@/utils"
 import getQuery from "@/utils/getQuery"
 let { auditFlowId } = getQuery()
 const value = ref<string>("")
