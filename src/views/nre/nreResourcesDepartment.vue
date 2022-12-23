@@ -2,6 +2,8 @@
   <el-card>
     <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="margin-top">
+      <el-button class="m-2" type="primary" @click="toModuleNumber">项目走量查看</el-button>
+      <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
       <el-table :data="data.resourceData" border :summary-method="getMouldSummaries" show-summary height="72vh">
         <el-table-column type="index" width="50" />
         <el-table-column label="模具名称" prop="modelName" width="180">
@@ -59,6 +61,9 @@ import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMo
 import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
+import router from "@/router"
+import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+import { CommonDownloadFile } from "@/api/bom"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
 let Host: string = "NreInputMould"
 
@@ -87,6 +92,36 @@ const submit = async () => {
     }
   })
   if (success) ElMessage.success("提交成功！")
+}
+
+// 跳转查看项目走量
+const toModuleNumber = () => {
+  router.push({
+    path: "/resourcesDepartment/moduleNumber",
+    query: {
+      auditFlowId,
+      productId
+    }
+  })
+}
+
+const downLoadSOR = async () => {
+  const { result }: any = (await getSorByAuditFlowId(auditFlowId)) || {}
+  if (!result.sorFileName) return false
+  let res: any = await CommonDownloadFile(result.sorFileId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = result.sorFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
 }
 
 const handleCalculation = async () => {
