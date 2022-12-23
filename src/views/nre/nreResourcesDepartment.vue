@@ -1,5 +1,6 @@
 <template>
   <el-card>
+    <InterfaceRequiredTime :ProcessIdentifier="Host" />
     <el-card class="margin-top">
       <el-table :data="data.resourceData" border :summary-method="getMouldSummaries" show-summary height="72vh">
         <el-table-column type="index" width="50" />
@@ -58,6 +59,8 @@ import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMo
 import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
+import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
+let Host: string = "NreInputMould"
 
 const { auditFlowId, productId }: any = getQuery()
 
