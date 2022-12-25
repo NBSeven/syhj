@@ -1,6 +1,8 @@
 <template>
   <div style="padding: 0 10px">
     <InterfaceRequiredTime :ProcessIdentifier="Host" />
+    <el-button class="m-2" type="primary" @click="toModuleNumber">项目走量查看</el-button>
+    <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
@@ -68,6 +70,9 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
+import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+import { CommonDownloadFile } from "@/api/bom"
+import router from "@/router"
 import getQuery from "@/utils/getQuery"
 import InterfaceRequiredTime from "@/components/InterfaceRequiredTime/index.vue"
 let Host: string = "NreInputGage"
@@ -96,7 +101,35 @@ const addQaqcDepartmentsData = () => {
     useWorkstation: null
   })
 }
+// 跳转查看项目走量
+const toModuleNumber = () => {
+  router.push({
+    path: "/resourcesDepartment/moduleNumber",
+    query: {
+      auditFlowId,
+      productId
+    }
+  })
+}
 
+const downLoadSOR = async () => {
+  const { result }: any = (await getSorByAuditFlowId(auditFlowId)) || {}
+  if (!result.sorFileName) return false
+  let res: any = await CommonDownloadFile(result.sorFileId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = result.sorFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+}
 const submit = async () => {
   const { success } = await PostQADepartment({
     auditFlowId,
