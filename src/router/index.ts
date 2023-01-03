@@ -18,12 +18,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  // {
+  //   path: "/login",
+  //   component: () => import("@/views/login/index.vue"),
+  //   meta: {
+  //     hidden: true
+  //   }
+  // },
   {
     path: "/login",
-    component: () => import("@/views/login/index.vue"),
+    component: () => {
+      let redirectUrl= "https://sso.sunnyoptical.cn/login?service=" +encodeURIComponent("http://localhost:8082/home")
+      window.location.href=redirectUrl
+    },
     meta: {
       hidden: true
-    }
+    },
   },
   {
     path: "/",

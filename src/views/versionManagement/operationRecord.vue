@@ -151,7 +151,6 @@ import nameMap from "./constant"
 import { Timer } from "@element-plus/icons-vue"
 import type { TableColumnCtx } from "element-plus"
 import { update } from "lodash"
-import { da } from "element-plus/es/locale"
 const { AuditFlowId, projectName, version }: any = getQuery()
 // 系统版本操作记录表-table数据
 const data = reactive<any>({
