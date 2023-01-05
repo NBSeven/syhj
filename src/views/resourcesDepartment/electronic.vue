@@ -80,7 +80,7 @@
                 :min="0"
                 @keyup.enter="handleCalculationIginalCurrency(scope.row, scope.$index)"
               />
-              <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
+              <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value.toFixed(5) }}</span>
             </template>
           </el-table-column>
         </el-table-column>

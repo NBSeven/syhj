@@ -112,7 +112,7 @@
                   :min="0"
                   @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
                 />
-                <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
+                <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value.toFixed(5) || 0 }}</span>
               </template>
             </el-table-column>
           </el-table-column>
