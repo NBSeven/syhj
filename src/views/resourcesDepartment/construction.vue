@@ -41,7 +41,7 @@
               width="120"
             >
               <template #default="scope">
-                <span>{{ scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0 }}</span>
+                <span>{{ Math.ceil(scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0) }}</span>
               </template>
             </el-table-column>
           </el-table-column>
@@ -56,6 +56,18 @@
                 />
               </el-select>
             </template>
+          </el-table-column>
+          <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
+              :key="item"
+              :label="`${item?.toString()}`"
+              width="120"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
+              </template>
+            </el-table-column>
           </el-table-column>
           <el-table-column prop="inTheRate" label="年降率">
             <el-table-column
@@ -75,18 +87,6 @@
                   <template #append> % </template>
                 </el-input>
                 <span v-else>{{ scope.row?.inTheRate[iginalCurrencyIndex]?.value }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
-            <el-table-column
-              v-for="(item, iginalCurrencyIndex) in data?.sop"
-              :key="item"
-              :label="`${item?.toString()}`"
-              width="120"
-            >
-              <template #default="scope">
-                <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
               </template>
             </el-table-column>
           </el-table-column>
