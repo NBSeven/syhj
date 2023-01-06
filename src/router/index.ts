@@ -750,6 +750,24 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: "/",
+    redirect: "/UpdateLogInfo/index",
+    component: Layout,
+    meta: {
+      title: "更新日志"
+    },
+    children: [
+      {
+        path: "/UpdateLogInfo/index",
+        component: () => import("@/views/UpdateLogInfo/index.vue"),
+        name: "UpdateLogInfo",
+        meta: {
+          title: "更新日志"
+        }
+      }
+    ]
+  },
   // {
   //   path: "/permission",
   //   component: Layout,
