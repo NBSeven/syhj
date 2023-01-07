@@ -187,6 +187,9 @@ onMounted(async () => {
   let res: any = await getAllAuditFlowInfos()
   // 待办2
   if (res.result) {
+    res.result = res.result.sort(function (a: any, b: any) {
+      return b.auditFlowId - a.auditFlowId
+    })
     let notShowList: any = []
     auditFlowIdInfoList.value = _.cloneDeep(res.result)
     auditFlowIdInfoList.value.forEach((item: any, index: number) => {
