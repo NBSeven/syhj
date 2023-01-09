@@ -147,7 +147,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     if (valid) {
-      dynamicValidateForm.value.creationTime = new Date()
+      //dynamicValidateForm.value.creationTime = new Date()
       let { success }: any = await AddVersions(dynamicValidateForm.value)
       console.log(success, "res")
       if (success) {
