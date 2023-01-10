@@ -33,18 +33,9 @@
         <el-table-column prop="processName" label="界面名称" />
         <el-table-column label="是否完成">
           <template #default="scope">
-            <el-tag
-              :type="
-                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime
-                  ? `success`
-                  : `danger`
-              "
-              >{{
-                scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime
-                  ? "是"
-                  : "否"
-              }}</el-tag
-            >
+            <el-tag :type="isAccomplish(scope.row) ? `success` : `danger`">{{
+              isAccomplish(scope.row) ? "是" : "否"
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="version" label="版本" />
@@ -89,7 +80,7 @@ import getQuery from "@/utils/getQuery"
 import { formatDateTime } from "@/utils"
 import nameMap from "./constant"
 import { Timer } from "@element-plus/icons-vue"
-import type { TableColumnCtx } from "element-plus"
+import { RowJustify, TableColumnCtx } from "element-plus"
 import { ElMessage } from "element-plus"
 import { update } from "lodash"
 import { da } from "element-plus/es/locale"
@@ -214,6 +205,24 @@ const sortChange = async () => {
   )
   data.operationRecordData = arr.flat(Infinity)
   getOrderNumber()
+}
+
+//是否完成方法
+const isAccomplish = (row: any) => {
+  if (row?.title == "模具费用" || row?.title == "结构单价" || row?.title == "电子单价") {
+    let row1 = data.operationRecordData.filter((p: any) => p.title == row?.title)
+    if (row1) {
+      let yesNo = false
+      row1.forEach((item: any) => {
+        if (item.auditFlowOperateTimes[item.auditFlowOperateTimes.length - 1]?.lastModifyTime) {
+          yesNo = true
+        }
+      })
+      return yesNo
+    }
+  } else {
+    return row.auditFlowOperateTimes[row.auditFlowOperateTimes.length - 1]?.lastModifyTime ? true : false
+  }
 }
 
 const getOrderNumber = () => {
