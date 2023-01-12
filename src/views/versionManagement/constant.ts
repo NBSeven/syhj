@@ -22,7 +22,7 @@ const nameMap = {
   "NRE实验费用录入界面": { classify: "NRE核价", title: "可靠性实验费" },
   "NRE核价手板件、差旅及其他费用录入界面": { classify: "NRE核价", title: "手板件/其他费用" },
   "工序工时导入界面2": { classify: "NRE核价", title: "治具/工装/设备/软件费用" },
-  "贸易合规审核（结束流程&退回流程）": { classify: "报价审核", title: "贸易合规判定" },
+  "贸易合规审核（结束流程&退回流程）": { classify: "核价审核", title: "贸易合规判定" },
   "核价看板&流程退回界面": { classify: "核价审核", title: "核价看板" },
   "项目部核价审核界面": { classify: "核价审核", title: "核价看板" },
   "财务部核价审核界面": { classify: "核价审核", title: "核价看板" },
@@ -30,6 +30,6 @@ const nameMap = {
   "总经理报价审批界面": { classify: "报价审核", title: "总经理审核" },
   "报价单": { classify: "报价输出", title: "营销报价" },
   "报价回传单": { classify: "报价归档", title: "报价回传" },
-  "文控": { classify: "报价归档", title: "归档（项目部）" },
+  "归档下载界面": { classify: "报价归档", title: "归档（项目部）" },
 }
 export default nameMap

@@ -31,11 +31,9 @@
         <el-table-column prop="classify" label="分类" />
         <el-table-column prop="title" label="任务标题" />
         <el-table-column prop="processName" label="界面名称" />
-        <el-table-column label="是否完成">
+        <el-table-column label="节点状态">
           <template #default="scope">
-            <el-tag :type="isAccomplish(scope.row) ? `success` : `danger`">{{
-              isAccomplish(scope.row) ? "是" : "否"
-            }}</el-tag>
+            <el-tag :type="istype(scope.row.processState)">{{ isAccomplish(scope.row.processState) }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="version" label="版本" />
@@ -47,7 +45,7 @@
         </el-table-column>
         <el-table-column prop="requiredTime" label="期望日期" :formatter="fomatterDate" />
         <el-table-column prop="roleName" label="修改人角色" />
-        <el-table-column label="完成日期">
+        <el-table-column label="更新时间">
           <template #default="scope">
             {{
               fomatterDat1e(scope.row.auditFlowOperateTimes[scope.row.auditFlowOperateTimes.length - 1]?.lastModifyTime)
@@ -83,7 +81,7 @@ import { Timer } from "@element-plus/icons-vue"
 import { RowJustify, TableColumnCtx } from "element-plus"
 import { ElMessage } from "element-plus"
 import { update } from "lodash"
-import { da } from "element-plus/es/locale"
+import { da, el } from "element-plus/es/locale"
 const { AuditFlowId, projectName, version }: any = getQuery()
 // 系统版本操作记录表-table数据
 const data = reactive<any>({
@@ -192,8 +190,8 @@ const sortChange = async () => {
   arr.push(data.operationRecordData.filter((p: any) => p.title == "可靠性实验费"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "手板件/其他费用"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "治具/工装/设备/软件费用"))
-  arr.push(data.operationRecordData.filter((p: any) => p.title == "贸易合规判定"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "核价看板"))
+  arr.push(data.operationRecordData.filter((p: any) => p.title == "贸易合规判定"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "报价分析"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "总经理审核"))
   arr.push(data.operationRecordData.filter((p: any) => p.title == "营销报价"))
@@ -208,23 +206,29 @@ const sortChange = async () => {
 }
 
 //是否完成方法
-const isAccomplish = (row: any) => {
-  if (row?.title == "模具费用" || row?.title == "结构单价" || row?.title == "电子单价") {
-    let row1 = data.operationRecordData.filter((p: any) => p.title == row?.title)
-    if (row1) {
-      let yesNo = false
-      row1.forEach((item: any) => {
-        if (item.auditFlowOperateTimes[item.auditFlowOperateTimes.length - 1]?.lastModifyTime) {
-          yesNo = true
-        }
-      })
-      return yesNo
-    }
-  } else {
-    return row.auditFlowOperateTimes[row.auditFlowOperateTimes.length - 1]?.lastModifyTime ? true : false
+const isAccomplish = (processState: any) => {
+  switch (processState) {
+    case 1:
+      return "已完成"
+    case 2:
+      return "进行中"
+    case 3:
+      return "未开始"
+    default:
+      return "状态错误"
   }
 }
 
+const istype = (processState: any) => {
+  switch (processState) {
+    case 1:
+      return "success"
+    case 2:
+      return ""
+    case 3:
+      return "info"
+  }
+}
 const getOrderNumber = () => {
   data.OrderObj = {}
   data.operationRecordData.forEach(function (element: any, index: any) {
