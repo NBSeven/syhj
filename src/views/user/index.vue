@@ -21,6 +21,7 @@
         name="excle"
         :on-progress="handleGetUploadProgress"
         :on-error="handleUploadError"
+        :before-upload="beforeupload"
       >
         <el-button type="primary">用户导入</el-button>
       </el-upload>
@@ -230,7 +231,26 @@ const saveUser = async (formEl: FormInstance | undefined) => {
     if (valid) {
       let res: any = null
       if (data.isEdit) {
-        res = await updateUser(data.userForm)
+        ElMessageBox.confirm("修改用户角色可能会导致未完成的流程出错!", "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(async () => {
+            res = await updateUser(data.userForm)
+            if (res.success) {
+              ElMessage({
+                type: "success",
+                message: "删除成功"
+              })
+            }
+          })
+          .catch(() => {
+            ElMessage({
+              type: "info",
+              message: "取消成功"
+            })
+          })
       } else {
         res = await createUser(data.userForm)
       }
@@ -272,20 +292,33 @@ const handlePsResetEdit = (index: number, row: User) => {
 
 const handleDelete = (index: number, row: User) => {
   console.log(index, row)
-  ElMessageBox.confirm("确定删除该用户?", "警告", {
+  ElMessageBox.confirm("删除用户会导致他们在未完成的流程中的页面权限清除!", "警告", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   })
     .then(async () => {
-      let res: any = await deleteUser(row.id)
-      console.log(res)
-      if (res.success) {
-        ElMessage({
-          type: "success",
-          message: "删除成功"
+      ElMessageBox.confirm("确定删除该用户?", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let res: any = await deleteUser(row.id)
+          console.log(res)
+          if (res.success) {
+            ElMessage({
+              type: "success",
+              message: "删除成功"
+            })
+          }
         })
-      }
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "取消成功"
+          })
+        })
     })
     .catch(() => {
       ElMessage({
@@ -361,6 +394,29 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     })
   }
 }
+
+const beforeupload = async (file: any) => {
+  return new Promise((resolve, reject) => {
+    // 判断上传格式*****************
+
+    ElMessageBox.confirm("删除用户会导致他们在未完成的流程中的页面权限清除!", "警告", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning"
+    })
+      .then(async () => {
+        resolve(file)
+      })
+      .catch(() => {
+        ElMessage({
+          type: "info",
+          message: "取消成功"
+        })
+        reject()
+      })
+  })
+}
+
 const downLoadTemplate = async () => {
   let res: any = await DownloadFile()
   const blob = res
