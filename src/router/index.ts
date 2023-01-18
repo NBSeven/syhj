@@ -664,6 +664,24 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/E-mail",
+    redirect: "/E-mail/index",
+    component: Layout,
+    meta: {
+      roles: ["admin"]
+    },
+    children: [
+      {
+        path: "/E-mail/index",
+        component: () => import("@/views/E-mail/index.vue"),
+        name: "E-mail",
+        meta: {
+          title: "邮箱管理"
+        }
+      }
+    ]
+  },
+  {
     path: "/dictionary",
     redirect: "/dictionary/index",
     component: Layout,
