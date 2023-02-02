@@ -10,7 +10,7 @@
           <el-input v-model="data.searchForm.displayName" />
         </el-form-item> -->
           <el-form-item label="邮箱地址" prop="emailAddress">
-            <el-input v-model="data.emailAddress" />
+            <el-input v-model="data.emailAddress" disabled />
           </el-form-item>
           <el-form-item label="邮箱密码" prop="emailPassword">
             <el-input v-model="data.emailPassword" />
@@ -74,14 +74,20 @@ const SaveEmailInfo = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      let { success }: any = await ChangeEmailInfo(data.value)
-      if (success) {
-        ElMessage({
-          type: "success",
-          message: "保存成功"
-        })
-        getList()
-      }
+      ElMessageBox.confirm("修改的密码请确认于集团域账号密码一致,否则系统将无法正常运行!", "Warning", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(async () => {
+        let { success }: any = await ChangeEmailInfo(data.value)
+        if (success) {
+          ElMessage({
+            type: "success",
+            message: "保存成功"
+          })
+          getList()
+        }
+      })
     } else {
       console.log("error submit!", fields)
     }
