@@ -1,6 +1,11 @@
 <template>
+  <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
+  <el-button class="m-2" type="primary" @click="downTrFile">TR-主方案下载</el-button>
   <div>
-    <el-card class="table-wrap" :header="`项目名称:` + projectName + ` 版本号:` + version">
+    <el-card
+      class="table-wrap"
+      :header="`项目名称:` + projectName + ` / 版本号:` + version + ` / 项目经理:` + projectManager"
+    >
       <el-form :inline="true" :model="formInline" class="demo-form-inline" label-position="top">
         <div v-for="(item, index) in Timeliness.values" :key="index">
           <el-form-item :label="item.name">
@@ -13,6 +18,7 @@
       </el-form>
     </el-card>
   </div>
+
   <div class="m-2">
     <!-- <h3>时效性管理</h3> -->
     <el-card class="table-wrap" header="系统版本操作记录表">
@@ -82,7 +88,10 @@ import { RowJustify, TableColumnCtx } from "element-plus"
 import { ElMessage } from "element-plus"
 import { update } from "lodash"
 import { da, el } from "element-plus/es/locale"
-const { AuditFlowId, projectName, version }: any = getQuery()
+import { CommonDownloadFile } from "@/api/bom"
+import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
+import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+const { AuditFlowId, projectName, version, projectManager }: any = getQuery()
 // 系统版本操作记录表-table数据
 const data = reactive<any>({
   operationRecordData: [],
@@ -116,6 +125,50 @@ const fomatterDat1e = (val: any) => {
   return formatDateTime(val)
 }
 
+// SOR下载
+const downLoadSOR = async () => {
+  if (!data.sorFileName) return false
+  let res: any = await CommonDownloadFile(data.fileId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = data.sorFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+}
+// TR主方案下载
+const downTrFile = async () => {
+  let res: any = (await getAuditFlowVersion(Number(AuditFlowId))) || {}
+  const trFileId = res.result?.solutionFileIdentifier
+  const solutionFileName = res.result?.solutionFileName
+  if (trFileId) {
+    try {
+      let res: any = await downloadFile(trFileId)
+      const blob = res
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = function () {
+        let url = URL.createObjectURL(new Blob([blob]))
+        let a = document.createElement("a")
+        document.body.appendChild(a) //此处增加了将创建的添加到body当中
+        a.href = url
+        a.download = solutionFileName
+        a.target = "_blank"
+        a.click()
+        a.remove() //将a标签移除
+      }
+    } catch (err) {
+      console.log(err, "downLoadError")
+    }
+  }
+}
 const arraySpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   // 合并行  产品名字相同合并、我是合并第三列，所以合判断columnIndex是否等于2
   // if (columnIndex === 2) {
@@ -252,9 +305,14 @@ const getOrderNumber = () => {
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-
+const getSORFileName = async () => {
+  const { result }: any = await getSorByAuditFlowId(AuditFlowId)
+  data.sorFileName = result.sorFileName
+  data.fileId = result.sorFileId
+}
 onMounted(async () => {
   init()
+  getSORFileName()
   let { result } = await GetTimeliness({ auditFlowId: AuditFlowId })
   if (result) {
     Timeliness.values = result.data

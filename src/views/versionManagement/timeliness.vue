@@ -13,7 +13,7 @@
             <el-button type="primary" link>
               <a
                 target="_blank"
-                :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}&projectName=${row.versionBasicInfo?.projectName}&version=${row.versionBasicInfo?.version}`"
+                :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}&projectName=${row.versionBasicInfo?.projectName}&version=${row.versionBasicInfo?.version}&projectManager=${row.versionBasicInfo?.projectManager}`"
               >
                 {{ row.versionBasicInfo.projectName }}
               </a>
@@ -22,6 +22,7 @@
         </el-table-column>
         <el-table-column prop="versionBasicInfo.version" label="版本号" />
         <el-table-column prop="versionBasicInfo.auditFlowId" label="流程单号" />
+        <el-table-column prop="versionBasicInfo.projectManager" label="项目经理" />
         <el-table-column label="拟稿时间">
           <template #default="{ row }">
             {{ formatDateTime(row.versionBasicInfo.draftTime || "") }}
