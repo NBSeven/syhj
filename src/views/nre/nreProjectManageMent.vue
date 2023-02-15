@@ -123,17 +123,17 @@
         </el-table-column>
         <el-table-column label="人数" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.peopleCount" :min="0" controls-position="right" />
+            <el-input v-model="row.peopleCount" :min="0" controls-position="right" @change="calculateCost(row)" />
           </template>
         </el-table-column>
         <el-table-column label="费用/天" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.costSky" :min="0" controls-position="right" />
+            <el-input v-model="row.costSky" :min="0" controls-position="right" @change="calculateCost(row)" />
           </template>
         </el-table-column>
         <el-table-column label="天数" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.skyCount" :min="0" controls-position="right" />
+            <el-input v-model="row.skyCount" :min="0" controls-position="right" @change="calculateCost(row)" />
           </template>
         </el-table-column>
         <el-table-column label="费用" width="150">
@@ -190,7 +190,7 @@ const deletehandboardCost = (i: number) => {
 }
 
 const deleteTravelCostData = (i: number) => {
-  data.handPieceCost.splice(i, 1)
+  data.travelExpense.splice(i, 1)
 }
 
 const deleteOtherCostData = (i: number) => {
@@ -207,6 +207,10 @@ const addOtherCostData = () => {
 
 const addTravelCostData = () => {
   data.travelExpense.push({ reasonsId: "", peopleCount: 0, costSky: 0, skyCount: 0, cost: 0, remark: "" })
+}
+
+const calculateCost = (row: TravelExpenseModel) => {
+  row.cost = (row.costSky || 0) * (row.peopleCount || 0) * (row?.skyCount || 0)
 }
 
 const submit = async () => {

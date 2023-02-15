@@ -7,6 +7,7 @@
         </el-form-item>
         <el-form-item :label="item.label" v-else-if="item.role === 'select'">
           <el-select
+            clearable
             :placeholder="item.placeholder || `请输入${item.label}`"
             v-model="formValue[item.key]"
             :multiple="item.multiple"
@@ -92,21 +93,21 @@ const formValue = reactive({
   ...(props.initFilterValue || {})
 })
 
-watch(
-  () => {
-    return formValue.ProjectName
-  },
-  () => {
-    formValue.Version = 1
-  },
-  { deep: true }
-)
+// watch(
+//   () => {
+//     return formValue.ProjectName
+//   },
+//   () => {
+//     formValue.Version = 1
+//   },
+//   { deep: true }
+// )
 
 const handleSubmit = () => {
   console.log(formValue)
   const formValueRef = JSON.parse(JSON.stringify(formValue))
   formValueRef.auditFlowId = formValueRef.auditFlowId ? formValueRef.auditFlowId : 0
-  formValueRef.Version = formValueRef.Version ? formValueRef.Version : 1
+  formValueRef.Version = formValueRef.Version ? formValueRef.Version : 0
   formValueRef.DraftDate = formValueRef.DraftDate ? formValueRef.DraftDate : []
   formValueRef.FinishedDate = formValueRef.FinishedDate ? formValueRef.FinishedDate : []
   props.onSubmit && props.onSubmit(formValueRef)

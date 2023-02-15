@@ -93,7 +93,8 @@ const data = reactive<any>({
       key: "ProjectName",
       role: "select",
       options: [],
-      onchange: getAllAuditFlowVersion
+      onchange: getAllAuditFlowVersion,
+      filterable: true
     },
     {
       label: "版本号",
