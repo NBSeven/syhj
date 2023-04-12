@@ -1,7 +1,8 @@
 // import { createRouter, createWebHashHistory, RouteRecordRaw, createWebHistory } from "vue-router"
 import { createRouter, RouteRecordRaw, createWebHistory } from "vue-router"
-
+import {NRE_ConstantRoutes} from "./NRE_index"
 const Layout = () => import("@/layout/index.vue")
+
 
 /** 常驻路由 */
 export const constantRoutes: Array<RouteRecordRaw> = [
@@ -526,7 +527,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
  * 用来放置有权限（roles 属性）的路由
  * 必须带有 name 属性
  */
-export const asyncRoutes: Array<RouteRecordRaw> = [
+export const asyncRoutes: Array<RouteRecordRaw> =[...NRE_ConstantRoutes,...[
   {
     path: "/timeliness",
     redirect: "/timeliness/index",
@@ -786,6 +787,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+
   // {
   //   path: "/permission",
   //   component: Layout,
@@ -846,7 +848,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
       }
     ]
   }
-]
+]]
 
 const router = createRouter({
   // history: createWebHashHistory(),
@@ -867,7 +869,9 @@ export function resetRouter() {
     })
   } catch (error) {
     // 强制刷新浏览器，不过体验不是很好
-    window.location.reload()
+
+
+    //window.location.reload()
   }
 }
 
