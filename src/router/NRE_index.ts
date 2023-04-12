@@ -133,6 +133,54 @@ export const NRE_ConstantRoutes: Array<RouteRecordRaw> = [
           title: "设备工具软件导入页面"
         }
       },
+      {
+        path: "/nre/NRECheckList",
+        component: () => import("@/NRE_views/NRECheckList/index.vue"),
+        name: "NRECheckList",
+        meta: {
+          title: "NRE核价表"
+        }
+      },
+      {
+        path: "/nre/SupervisorAudit",
+        component: () => import("@/NRE_views/SupervisorAudit/index.vue"),
+        name: "SupervisorAudit",
+        meta: {
+          title: "项目部门课长审核"
+        }
+      },
+      {
+        path: "/nre/SupervisorLook",
+        component: () => import("@/NRE_views/SupervisorLook/index.vue"),
+        name: "SupervisorLook",
+        meta: {
+          title: "项目部部长查看"
+        }
+      },
+      {
+        path: "/nre/requestQuote",
+        component: () => import("@/NRE_views/requestQuote/index.vue"),
+        name: "requestQuote",
+        meta: {
+          title: "营销部-NRE报价审核"
+        }
+      },
+      {
+        path: "/nre/marketingQuotation",
+        component: () => import("@/NRE_views/marketingQuotation/index.vue"),
+        name: "marketingQuotation",
+        meta: {
+          title: "总经理审批界面"
+        }
+      },
+      {
+        path: "/nre/offerFeedback",
+        component: () => import("@/NRE_views/offerFeedback/index.vue"),
+        name: "offerFeedback",
+        meta: {
+          title: "报价反馈"
+        }
+      },
     ],
   },
 ]
