@@ -94,7 +94,6 @@ import { GetUpdateLogInfo, DelUpdateLogInfo, AddVersions } from "./service"
 import { formatDateTime } from "@/utils"
 import type { FormInstance } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { tr } from "element-plus/es/locale"
 // import { useRoute, useRouter } from "vue-router"
 /**
  * 路由对象

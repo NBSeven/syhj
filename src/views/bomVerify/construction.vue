@@ -3,85 +3,91 @@
     <div>
       <ThreeDImage style="margin-left: 30px" />
     </div>
-    <el-card v-for="(item, index) in constructionBomList" :header="item.superTypeName" :key="index" class="table-wrap">
-      <el-table
-        ref="multipleTableRef"
-        :data="item.structureMaterial"
-        style="width: 100%"
-        height="75vh"
-        v-loading="loading"
-        @selection-change="selectionChange($event, index)"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column type="index" label="序号" width="70" fixed />
-        <el-table-column prop="categoryName" label="物料大类" fixed width="80" />
-        <el-table-column prop="typeName" label="物料种类" fixed width="80" />
-        <el-table-column prop="sapItemNum" label="物料编号" fixed width="80" />
-        <el-table-column prop="drawingNumName" label="图号名称" fixed width="80" />
-        <el-table-column prop="overallDimensionSize" label="外形尺寸" width="80" />
-        <el-table-column prop="materialName" label="材料" width="80" />
-        <el-table-column prop="weightNumber" label="重量g" width="80" />
-        <el-table-column prop="moldingProcess" label="成型工艺" width="80" />
-        <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
-        <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
-        <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="80" />
-        <el-table-column prop="materialsUseCount" label="项目物料的使用量">
-          <el-table-column
-            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
-            :key="item"
-            :label="`${item?.toString()}`"
-            width="80"
-          >
+    <el-card
+      v-for="(item, index) in constructionBomList"
+      :header="item.superTypeName"
+      :key="index"
+      class="table-wrap"
+    >
+      <div v-if="item.structureMaterial.length">
+        <el-table
+          ref="multipleTableRef"
+          :data="item.structureMaterial"
+          style="width: 100%"
+          height="75vh"
+          v-loading="loading"
+          @selection-change="selectionChange($event, index)"
+        >
+          <el-table-column type="selection" width="55" />
+          <el-table-column type="index" label="序号" width="70" fixed />
+          <el-table-column prop="categoryName" label="物料大类" fixed width="80" />
+          <el-table-column prop="typeName" label="物料种类" fixed width="80" />
+          <el-table-column prop="sapItemNum" label="物料编号" fixed width="80" />
+          <el-table-column prop="drawingNumName" label="图号名称" fixed width="80" />
+          <el-table-column prop="overallDimensionSize" label="外形尺寸" width="80" />
+          <el-table-column prop="materialName" label="材料" width="80" />
+          <el-table-column prop="weightNumber" label="重量g" width="80" />
+          <el-table-column prop="moldingProcess" label="成型工艺" width="80" />
+          <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="80" />
+          <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="80" />
+          <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="80" />
+          <el-table-column prop="materialsUseCount" label="项目物料的使用量">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              :key="item"
+              :label="`${item?.toString()}`"
+              width="80"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0 }}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column prop="currency" label="币种" width="80">
             <template #default="scope">
-              <span>{{ scope.row?.materialsUseCount[iginalCurrencyIndex]?.value || 0 }}</span>
+              <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
+                <el-option
+                  v-for="item in exchangeSelectOptions"
+                  :key="item.id"
+                  :label="item.exchangeRateKind"
+                  :value="item.id"
+                />
+              </el-select>
             </template>
           </el-table-column>
-        </el-table-column>
-        <el-table-column prop="currency" label="币种" width="80">
-          <template #default="scope">
-            <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-              <el-option
-                v-for="item in exchangeSelectOptions"
-                :key="item.id"
-                :label="item.exchangeRateKind"
-                :value="item.id"
-              />
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
-          <el-table-column
-            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
-            :key="item"
-            :label="`${item?.toString()}`"
-            :prop="`systemiginalCurrency[${iginalCurrencyIndex}].value`"
-            width="80"
-          >
-            <template #default="scope">
-              <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
-            </template>
+          <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              :key="item"
+              :label="`${item?.toString()}`"
+              :prop="`systemiginalCurrency[${iginalCurrencyIndex}].value`"
+              width="80"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.systemiginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
+              </template>
+            </el-table-column>
           </el-table-column>
-        </el-table-column>
-        <el-table-column prop="inTheRate" label="年降率">
-          <el-table-column
-            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
-            :key="`construction-iginalCurrency${item}`"
-            :label="`${item?.toString()}`"
-            :prop="`inTheRate[${iginalCurrencyIndex}].value`"
-            width="80"
-          >
-            <template #default="scope">
-              <span>{{ scope.row?.inTheRate[iginalCurrencyIndex]?.value }}</span>
-            </template>
+          <el-table-column prop="inTheRate" label="年降率">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              :key="`construction-iginalCurrency${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`inTheRate[${iginalCurrencyIndex}].value`"
+              width="80"
+            >
+              <template #default="scope">
+                <span>{{ scope.row?.inTheRate[iginalCurrencyIndex]?.value }}</span>
+              </template>
+            </el-table-column>
           </el-table-column>
-        </el-table-column>
-        <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
+          <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
               <el-input v-if="scope.row.isEdit" v-model="scope.row.materialsSystemPrice" />
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-        <!-- <el-table-column label="Sop" align="center" v-if="allColums?.sop.length">
+          <!-- <el-table-column label="Sop" align="center" v-if="allColums?.sop.length">
           <el-table-column
             v-for="(item, index) in allColums?.sop"
             :key="item"
@@ -90,57 +96,58 @@
             width="150"
           />
         </el-table-column> -->
-        <el-table-column prop="iginalCurrency" label="原币">
-          <el-table-column
-            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
-            :key="`construction-iginalCurrency${item}`"
-            :label="`${item?.toString()}`"
-            :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
-            width="80"
-          >
-            <template #default="{ row }">
-              {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value).toFixed(3) || 0 }}
-            </template>
+          <el-table-column prop="iginalCurrency" label="原币">
+            <el-table-column
+              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              :key="`construction-iginalCurrency${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
+              width="80"
+            >
+              <template #default="{ row }">
+                {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value).toFixed(3) || 0 }}
+              </template>
+            </el-table-column>
           </el-table-column>
-        </el-table-column>
-        <el-table-column prop="standardMoney" label="本位币">
-          <el-table-column
-            v-for="(item, index) in allColums?.sop"
-            :key="`construction-standardMoney${item}`"
-            :label="`${item?.toString()}`"
-            :prop="`standardMoney[${index}].value`"
-            width="80"
-          >
-            <template #default="{ row }">
-              {{ (row.standardMoney && row.standardMoney[index]?.value).toFixed(3) || 0 }}
-            </template>
+          <el-table-column prop="standardMoney" label="本位币">
+            <el-table-column
+              v-for="(item, index) in allColums?.sop"
+              :key="`construction-standardMoney${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`standardMoney[${index}].value`"
+              width="80"
+            >
+              <template #default="{ row }">
+                {{ (row.standardMoney && row.standardMoney[index]?.value).toFixed(3) || 0 }}
+              </template>
+            </el-table-column>
           </el-table-column>
-        </el-table-column>
-        <el-table-column prop="moq" label="MOQ" width="80" />
-        <el-table-column prop="rebateMoney" label="物料返利金额" />
-        <el-table-column prop="remark" label="备注" />
-        <el-table-column prop="eccnCode" label="物料管制状态" />
-        <el-table-column prop="peopleName" fixed="right" label="确认人" />
-      </el-table>
-      <el-descriptions :column="2" border>
-        <el-descriptions-item
-          v-for="standardMoneyItem in allColums.sop"
-          :key="standardMoneyItem"
-          :label="`${standardMoneyItem} 本位币汇总`"
-        >
-          {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
-        </el-descriptions-item>
-      </el-descriptions>
+          <el-table-column prop="moq" label="MOQ" width="80" />
+          <el-table-column prop="rebateMoney" label="物料返利金额" />
+          <el-table-column prop="remark" label="备注" />
+          <el-table-column prop="eccnCode" label="物料管制状态" />
+          <el-table-column prop="peopleName" fixed="right" label="确认人" />
+        </el-table>
+        <el-descriptions :column="2" border>
+          <el-descriptions-item
+            v-for="standardMoneyItem in allColums.sop"
+            :key="standardMoneyItem"
+            :label="`${standardMoneyItem} 本位币汇总`"
+          >
+            {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
     </el-card>
     <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
-      <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
+      <el-button type="primary" @click="handleSetBomState(true)" v-havedone :disabled="!isAll">同意</el-button>
       <el-button type="danger" @click="handleSetBomState(false)" v-havedone>拒绝</el-button>
     </el-row>
   </el-card>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect, watch, nextTick } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, watch, nextTick, computed } from "vue"
 import { GetBOMStructuralSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
@@ -149,7 +156,7 @@ import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import ThreeDImage from "@/components/ThreeDImage/index.vue"
 import { useRouter } from "vue-router"
-
+let isAll = ref(false)
 let router = useRouter()
 const { jumpTodoCenter } = useJump()
 
@@ -212,6 +219,9 @@ const toggleSelection = (Ids: any) => {
   })
 }
 
+const constructionBomListfilter = computed(() => {
+  return constructionBomList.value.filter((item) => item.structureMaterial.length)
+})
 // const toFixedThree = (_recoed: any, _row: any, val: any) => {
 //   if (typeof val === "number" && val > 0) return val.toFixed(3)
 //   return val
@@ -235,7 +245,8 @@ const fetchConstructionInitData = async () => {
     loading.value = true
     const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
     //console.log(result, "获取初始化数据")
-    constructionBomList.value = result
+    constructionBomList.value = result.constructionDtos
+    isAll.value = result.isAll
     loading.value = false
   } catch {
     loading.value = false

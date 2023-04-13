@@ -112,7 +112,7 @@
       </el-row> -->
     </el-card>
     <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
-      <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
+      <el-button type="primary" @click="handleSetBomState(true)" v-havedone   :disabled="!isAll">同意</el-button>
       <el-button type="danger" @click="handleSetBomState(false)" v-havedone>拒绝</el-button>
     </el-row>
   </el-card>
@@ -129,6 +129,7 @@ import { ElMessageBox, ElMessage, ElTable } from "element-plus"
 import useJump from "@/hook/useJump"
 import { useRouter } from "vue-router"
 let router = useRouter()
+let isAll = ref(false)
 const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -230,8 +231,9 @@ const allStandardMoney = computed(() => {
 // 获取电子料初始化数据
 const fetchElectronicInitData = async () => {
   const { result } = await GetBOMElectronicSingle(auditFlowId, productId)
-  //console.log(result, "获取初始化数据")
-  electronicBomList.value = result
+  console.log(result, "获取初始化数据")
+  electronicBomList.value = result.electronicDtos
+  isAll.value = result.isAll
   // 初始化表头数据
   const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
     electronicBomList?.value[0] || {}

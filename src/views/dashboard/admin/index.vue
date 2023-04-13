@@ -206,8 +206,18 @@
         <el-checkbox label="ManHourImport">工程技术部-工序工时录入</el-checkbox>
         <el-checkbox label="LogisticsCostInput">生产管理部-物流成本录入</el-checkbox>
         <el-checkbox label="NreInputMould">资源管理课-模具单价录入</el-checkbox>
-        <el-checkbox label="StructPriceInput">资源管理课-结构单价录入</el-checkbox>
-        <el-checkbox label="ElectronicPriceInput">资源管理课-电子单价录入</el-checkbox>
+        <el-checkbox :disabled="checkList.includes('StructBomPriceAudit')" label="StructPriceInput"
+          >资源管理课-结构单价录入</el-checkbox
+        >
+        <el-checkbox :disabled="checkList.includes('ElecBomPriceAudit')" label="ElectronicPriceInput"
+          >资源管理课-电子单价录入</el-checkbox
+        >
+        <el-checkbox :disabled="checkList.includes('StructPriceInput')" label="StructBomPriceAudit"
+          >资源管理课-结构单价审核界面</el-checkbox
+        >
+        <el-checkbox :disabled="checkList.includes('ElectronicPriceInput')" label="ElecBomPriceAudit"
+          >资源管理课-电子单价审核</el-checkbox
+        >
       </el-checkbox-group>
       <div>
         <div style="margin: 10px 0">拒绝理由：</div>
@@ -293,7 +303,7 @@ let costChart: any = null
 let percentageCostChart: any = null
 let selectCostChart: any = null
 let dialogVisible = ref(false)
-let checkList = ref([])
+let checkList = ref([""])
 let opinionDescription = ref("")
 const fileList = ref<UploadUserFile[]>([])
 const data = reactive<Record<string, any>>({
