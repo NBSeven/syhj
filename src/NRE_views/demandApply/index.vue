@@ -105,15 +105,10 @@
                 <el-input v-model="row.singleCarProductsQuantity" oninput="value=value.replace(/[^\d]/g,'')" />
               </template>
             </el-table-column>
-            <el-table-column
-              :label="year + ''"
-              v-for="(year, index) in state.quoteForm.projectCycle"
-              :key="year + ''"
-              width="180"
-            >
+            <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
               <template #default="{ row }">
                 <el-input
-                  v-model="row.modelCountYearList[index].quantity"
+                  v-model="row.modelCountYearList[index]"
                   @input="modelCountYearListQuantitySum(row)"
                   oninput="value=value.replace(/[^\d]/g,'')"
                 />
@@ -201,6 +196,7 @@ import dayjs from "dayjs"
 const fileList = ref<UploadUserFile[]>([])
 const refForm = ref<FormInstance>()
 let saveloading = ref(false)
+const yearCount = ref(0)
 interface Options {
   id: number
   displayName: string
@@ -219,9 +215,11 @@ const state = reactive({
     quoteVersion: "",
     projectCycle: 0,
     deadline: "",
-    projectManager: 0
+    projectManager: 0,
+    sopTime: dayjs(new Date()).format("YYYY")
   },
-  productTypeOptions: [] as unknown as Options[]
+  productTypeOptions: [] as unknown as Options[],
+  yearCols: [] as Number[]
 })
 //模组数量table
 let moduleTableData: any = ref([
@@ -270,7 +268,18 @@ const generateTitle = () => {
 const modelCountYearListQuantitySum = (row: modelCount) => {
   console.log("暂时功能先去掉", row)
 }
-const yearChange = (val: number | undefined) => {}
+const yearChange = (val: number | undefined) => {
+  if (val) {
+    yearCount.value = val
+    let i = state.quoteForm.projectCycle
+    state.yearCols = []
+    state.quoteForm.sopTime
+    for (let j = 0; j < i; j++) {
+      state.yearCols.push(Number(state.quoteForm.sopTime) + j)
+    }
+    // console.log(state.yearCols, "state.yearCols ")
+  }
+}
 
 const addProduct = () => {
   moduleTableData.value.push({
