@@ -14,169 +14,169 @@ export const NRE_ConstantRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "/NREDemand/index",
+        path: "/NREDemand_views/index",
         component: () => import("@/NRE_views/demandApply/index.vue"),
-        name: "NREDemand",
+        name: "NREDemand_nre",
         meta: {
           title: "NRE核价需求"
         }
       },
       {
-        path: "/NREpartEntry/managerOperate",
+        path: "/NREpartEntry_views/managerOperate",
         component: () => import("@/NRE_views/partEntry/managerOperate.vue"),
-        name: "managerOperate",
+        name: "managerOperate_nre",
         meta: {
           title: "NRE项目经理录入"
         }
       },
       {
-        path: "/nre/nreResourcesDepartment",
+        path: "/nre_views/nreResourcesDepartment",
         component: () => import("@/NRE_views/NRE/nreResourcesDepartment.vue"),
-        name: "nreResourcesDepartment",
+        name: "nreResourcesDepartment_nre",
         meta: {
           title: "NRE模具清单"
         }
       },
       {
-        path: "/nre/nreProjectManageMent",
+        path: "/nre_views/nreProjectManageMent",
         component: () => import("@/NRE_views/nre/nreProjectManageMent.vue"),
-        name: "nreProjectManageMent",
+        name: "nreProjectManageMent_nre",
         meta: {
           title: "NRE项目管理部"
         }
       },
       {
-        path: "/nre/nrePilotprojects",
+        path: "/nre_views/nrePilotprojects",
         component: () => import("@/NRE_views/nre/nrePilotprojects.vue"),
-        name: "nrePilotprojects",
+        name: "nrePilotprojects_nre",
         meta: {
           title: "产品部NRE"
         }
       },
       {
-        path: "/nre/nreExperimentItems",
+        path: "/nre_views/nreExperimentItems",
         component: () => import("@/NRE_views/nre/nreExperimentItems.vue"),
-        name: "nreExperimentItems",
+        name: "nreExperimentItems_nre",
         meta: {
           title: "品保部实验NRE"
         }
       },
       {
-        path: "/basicLibrary/Reliability",
+        path: "/basicLibrary_views/Reliability",
         component: () => import("@/NRE_views/basicLibrary/Reliability/index.vue"),
-        name: "Reliability",
+        name: "Reliability_nre",
         meta: {
           title: "实验库-可靠性"
         }
       },
       {
-        path: "/basicLibrary/EMC",
+        path: "/basicLibrary_views/EMC",
         component: () => import("@/NRE_views/basicLibrary/EMC/index.vue"),
-        name: "EMC",
+        name: "EMC_nre",
         meta: {
           title: "实验库-EMC"
         }
       },
       {
-        path: "/basicLibrary/equipment",
+        path: "/basicLibrary_views/equipment",
         component: () => import("@/NRE_views/basicLibrary/equipment/index.vue"),
-        name: "equipment",
+        name: "equipment_nre",
         meta: {
           title: "设备库界面"
         }
       },
       {
-        path: "/basicLibrary/toolsFixtures",
+        path: "/basicLibrary_views/toolsFixtures",
         component: () => import("@/NRE_views/basicLibrary/toolsFixtures/index.vue"),
-        name: "toolsFixtures",
+        name: "toolsFixtures_nre",
         meta: {
           title: "治具检具库"
         }
       },
       {
-        path: "/basicLibrary/frock",
+        path: "/basicLibrary_views/frock",
         component: () => import("@/NRE_views/basicLibrary/frock/index.vue"),
-        name: "frock",
+        name: "frock_nre",
         meta: {
           title: "工装库"
         }
       },
       {
-        path: "/basicLibrary/process",
+        path: "/basicLibrary_views/process",
         component: () => import("@/NRE_views/basicLibrary/process/index.vue"),
-        name: "process",
+        name: "process_nre",
         meta: {
           title: "工序库"
         }
       },
       {
-        path: "/basicLibrary/softHardware",
+        path: "/basicLibrary_views/softHardware",
         component: () => import("@/NRE_views/basicLibrary/softHardware/index.vue"),
-        name: "softHardware",
+        name: "softHardware_nre",
         meta: {
           title: "软硬件库"
         }
       },
       {
-        path: "/basicLibrary/craft",
+        path: "/basicLibrary_views/craft",
         component: () => import("@/NRE_views/basicLibrary/craft/index.vue"),
-        name: "craft",
+        name: "craft_nre",
         meta: {
           title: "标准工艺库"
         }
       },
       {
-        path: "/nre/toLead",
+        path: "/nre_views/toLead",
         component: () => import("@/NRE_views/toLead/index.vue"),
-        name: "toLead",
+        name: "toLead_nre",
         meta: {
           title: "设备工具软件导入页面"
         }
       },
       {
-        path: "/nre/NRECheckList",
+        path: "/nre_views/NRECheckList",
         component: () => import("@/NRE_views/NRECheckList/index.vue"),
-        name: "NRECheckList",
+        name: "NRECheckList_nre",
         meta: {
           title: "NRE核价表"
         }
       },
       {
-        path: "/nre/SupervisorAudit",
+        path: "/nre_views/SupervisorAudit",
         component: () => import("@/NRE_views/SupervisorAudit/index.vue"),
-        name: "SupervisorAudit",
+        name: "SupervisorAudit_nre",
         meta: {
           title: "项目部门课长审核"
         }
       },
       {
-        path: "/nre/SupervisorLook",
+        path: "/nre_views/SupervisorLook",
         component: () => import("@/NRE_views/SupervisorLook/index.vue"),
-        name: "SupervisorLook",
+        name: "SupervisorLook_nre",
         meta: {
           title: "项目部部长查看"
         }
       },
       {
-        path: "/nre/requestQuote",
+        path: "/nre_views/requestQuote",
         component: () => import("@/NRE_views/requestQuote/index.vue"),
-        name: "requestQuote",
+        name: "requestQuote_nre",
         meta: {
           title: "营销部-NRE报价审核"
         }
       },
       {
-        path: "/nre/marketingQuotation",
+        path: "/nre_views/marketingQuotation",
         component: () => import("@/NRE_views/marketingQuotation/index.vue"),
-        name: "marketingQuotation",
+        name: "marketingQuotation_nre",
         meta: {
           title: "总经理审批界面"
         }
       },
       {
-        path: "/nre/offerFeedback",
+        path: "/nre_views/offerFeedback",
         component: () => import("@/NRE_views/offerFeedback/index.vue"),
-        name: "offerFeedback",
+        name: "offerFeedback_nre",
         meta: {
           title: "报价反馈"
         }
