@@ -878,6 +878,11 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
   // row.modelTotal = sum
 }
 const save = async (formEl: FormInstance | undefined) => {
+   ElMessage({
+      type: "success",
+      message: "此网站不再支持新建流程,请到二开进行新建流程地址为http://10.1.1.131:8081/login"
+    })
+  return
   let { auditFlowId } = route.query
   // 模组走量不能为0
   let isModuleTableDataQuantity = false
@@ -1242,6 +1247,10 @@ const rateChange = (val: any) => {
   })
 }
 onMounted(async () => {
+  // ElMessage({
+  //     type: "success",
+  //     message: "此网站不再支持新建流程,请到二开进行新建流程地址为http://10.1.1.131:8081/login"
+  // })
   let query = getQuery()
   state.quoteForm.projectName = query.projectName ? query.projectName + "" : ""
   state.quoteForm.projectCode = query.projectCode ? query.projectCode + "" : ""

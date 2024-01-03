@@ -76,7 +76,7 @@
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getAllAuditFlowInfos, getAuditFlowNewVersionByProjectName } from "./service"
 import type { FormInstance, FormRules } from "element-plus"
-
+import { ElMessage } from "element-plus"
 import urlMap from "./constant"
 // import { useStore } from "vuex"
 import { useRouter } from "vue-router"
@@ -118,6 +118,11 @@ let isProductManager = ref(false)
 // let userStorage = window.localStorage.getItem("user")
 // let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const saveNew = async (formEl: FormInstance | undefined) => {
+   ElMessage({
+      type: "success",
+      message: "此网站不再支持新建流程,请到二开进行新建流程地址为http://10.1.1.131:8081/login"
+    })
+  return
   if (!formEl) return
   if (!form.quoteVersion && form.quoteProjectName) {
     let resVersion: any = await getAuditFlowNewVersionByProjectName(form.quoteProjectName)
